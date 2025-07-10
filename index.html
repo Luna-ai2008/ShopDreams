@@ -1,1 +1,2438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Tienda online de moda y belleza. Encuentra los mejores productos de skincare, maquillaje y ropa de tendencia." />
+    <title>ShopDreams - Tu tienda online de moda y belleza</title>
+    <style>
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Nueva animación para maquillajes cayendo (una sola vez) */
+        @keyframes falling {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(calc(100vh + 100px)) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Estilos para los elementos de maquillaje que caen */
+        .falling-makeup {
+            position: fixed;
+            top: -100px;
+            z-index: 10;
+            pointer-events: none;
+            animation: falling 3s ease-in forwards;
+            font-size: 24px;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff0f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        header {
+            background-color: #e91e63;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav {
+            background-color: #f8bbd0;
+            padding: 10px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: fadeIn 1s ease-out 0.2s both;
+        }
+        
+        nav a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        nav a:hover {
+            color: #e91e63;
+            transform: translateY(-3px);
+        }
+        
+        section {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out 0.4s both;
+            display: none;
+        }
+        
+        section.active {
+            display: block;
+        }
+        
+        .tienda {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .producto {
+            width: 30%;
+            background-color: #fff;
+            border: 1px solid #f8bbd0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+        }
+        
+        .descuento {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #e91e63;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            z-index: 1;
+        }
+        
+        .precio-original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9em;
+        }
+        
+        .producto:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 10px 20px rgba(233, 30, 99, 0.2);
+        }
+        
+        .producto img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.5s ease;
+        }
+        
+        .producto:hover img {
+            transform: scale(1.05) rotate(1deg);
+        }
+        
+        .producto h3 {
+            margin-bottom: 5px;
+            color: #e91e63;
+            transition: color 0.3s;
+        }
+        
+        .producto p {
+            margin: 5px 0;
+        }
+        
+        .producto .precio {
+            font-weight: bold;
+            color: #e91e63;
+            font-size: 1.2em;
+            animation: pulse 2s infinite;
+        }
+        
+        .cantidad-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        
+        .cantidad-selector button {
+            background-color: #f8bbd0;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .cantidad-selector input {
+            width: 40px;
+            text-align: center;
+            margin: 0 5px;
+            border: 1px solid #f8bbd0;
+            border-radius: 5px;
+            padding: 5px;
+        }
+        
+        .producto button {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .producto button:hover {
+            background-color: #c2185b;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 5px 10px rgba(194, 24, 91, 0.3);
+        }
+        
+        .producto button:active {
+            transform: translateY(1px);
+        }
+        
+        #carrito {
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 30px;
+            border: 1px solid #f8bbd0;
+            transition: all 0.3s ease;
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            width: 300px;
+            z-index: 99;
+        }
+        
+        #carrito:hover {
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.1);
+        }
+        
+        #lista-carrito {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        #lista-carrito li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #f8bbd0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        #lista-carrito li:hover {
+            background-color: #fff0f5;
+        }
+        
+        #lista-carrito button {
+            background: none;
+            border: none;
+            color: #e91e63;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: transform 0.3s;
+        }
+        
+        #lista-carrito button:hover {
+            transform: scale(1.2);
+        }
+        
+        #total {
+            font-size: 1.3em;
+            margin-top: 20px;
+            text-align: right;
+            font-weight: bold;
+            color: #e91e63;
+        }
+        
+        .articulo {
+            background-color: #ffe4ec;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .articulo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(233, 30, 99, 0.1);
+        }
+        
+        .articulo img {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 15px;
+            transition: transform 0.5s ease;
+        }
+        
+        .articulo:hover img {
+            transform: scale(1.02);
+        }
+        
+        footer {
+            background-color: #e91e63;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            animation: fadeIn 1s ease-out 0.6s both;
+        }
+        
+        .social-icons {
+            margin: 15px 0;
+        }
+        
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5em;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.2);
+        }
+        
+        .consejos-texto {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .consejo {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(233, 30, 99, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .consejo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(233, 30, 99, 0.2);
+        }
+        
+        .consejo h3 {
+            color: #e91e63;
+            margin-top: 0;
+            border-bottom: 1px dashed #f8bbd0;
+            padding-bottom: 10px;
+        }
+        
+        .consejos-imagenes {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .consejos-imagenes img {
+            width: 30%;
+            min-width: 250px;
+            border-radius: 10px;
+            object-fit: cover;
+            height: 200px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+        }
+        
+        .consejos-imagenes img:hover {
+            transform: scale(1.05) rotate(1deg);
+        }
+        
+        /* Estilos para el cajero */
+        #cajero {
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #f8bbd0;
+            animation: fadeIn 0.5s ease-out;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .metodos-pago {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .metodo-pago {
+            border: 2px solid #f8bbd0;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 120px;
+        }
+        
+        .metodo-pago:hover {
+            border-color: #e91e63;
+            transform: translateY(-5px);
+        }
+        
+        .metodo-pago.seleccionado {
+            border-color: #e91e63;
+            background-color: #fff0f5;
+            animation: pulse 0.5s;
+        }
+        
+        .metodo-pago img {
+            width: 50px;
+            height: 30px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .metodo-pago:hover img {
+            transform: scale(1.1);
+        }
+        
+        .formulario-pago {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #e91e63;
+            box-shadow: 0 0 5px rgba(233, 30, 99, 0.3);
+            transform: scale(1.01);
+        }
+        
+        .btn-pagar {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-pagar:hover {
+            background-color: #c2185b;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(194, 24, 91, 0.3);
+        }
+        
+        .btn-pagar:active {
+            transform: translateY(1px);
+        }
+        
+        #btn-finalizar-compra {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        #btn-finalizar-compra:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(69, 160, 73, 0.3);
+        }
+        
+        #btn-finalizar-compra:active {
+            transform: translateY(1px);
+        }
+        
+        #btn-finalizar-compra:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .categoria-titulo {
+            text-align: center;
+            color: #e91e63;
+            margin: 30px 0;
+            font-size: 2em;
+            position: relative;
+        }
+        
+        .categoria-titulo:after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background-color: #e91e63;
+            margin: 10px auto;
+        }
+        
+        .categoria-descripcion {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #666;
+        }
+        
+        .btn-cerrar-cajero {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .btn-cerrar-cajero:hover {
+            color: #e91e63;
+        }
+
+        .pasos-compra {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .paso {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+        
+        .paso:not(:last-child):after {
+            content: "";
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background-color: #f8bbd0;
+            z-index: -1;
+        }
+        
+        .numero-paso {
+            width: 30px;
+            height: 30px;
+            background-color: #f8bbd0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .paso.activo .numero-paso {
+            background-color: #e91e63;
+            color: white;
+        }
+        
+        .paso.completado .numero-paso {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .producto {
+                width: 100%;
+            }
+            
+            nav {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .consejos-imagenes img {
+                width: 100%;
+            }
+            
+            .metodos-pago {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            #carrito {
+                position: static;
+                width: auto;
+                margin: 20px auto;
+            }
+            
+            .pasos-compra {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .paso:not(:last-child):after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>✨ ShopDreams ✨</h1>
+        <p>Tu destino para el cuidado de la piel, maquillaje y las últimas tendencias de moda</p>
+    </header>
+
+    <nav>
+        <a href="#" onclick="mostrarSeccion('inicio')">Inicio</a>
+        <a href="#" onclick="mostrarSeccion('moda')">Moda</a>
+        <a href="#" onclick="mostrarSeccion('belleza')">Belleza</a>
+        <a href="#" onclick="mostrarSeccion('skincare')">Skincare</a>
+        <a href="#" onclick="mostrarSeccion('accesorios')">Accesorios</a>
+        <a href="#" onclick="mostrarSeccion('consejos')">Consejos</a>
+        <a href="#" onclick="mostrarSeccion('contacto')">Contacto</a>
+    </nav>
+
+    <!-- Carrito de compras -->
+    <div id="carrito">
+        <h3>🛒 Tu Carrito</h3>
+        <ul id="lista-carrito"></ul>
+        <div id="total">Total: $0.00</div>
+        <button id="btn-finalizar-compra" onclick="mostrarCajero()" disabled>Finalizar Compra</button>
+    </div>
+
+    <!-- Cajero de pago -->
+    <div class="overlay" id="overlay"></div>
+    <div id="cajero">
+        <button class="btn-cerrar-cajero" onclick="cerrarCajero()">×</button>
+        
+        <div class="pasos-compra">
+            <div class="paso" id="paso1">
+                <div class="numero-paso">1</div>
+                <div>Método de pago</div>
+            </div>
+            <div class="paso" id="paso2">
+                <div class="numero-paso">2</div>
+                <div>Envío</div>
+            </div>
+            <div class="paso" id="paso3">
+                <div class="numero-paso">3</div>
+                <div>Confirmación</div>
+            </div>
+        </div>
+        
+        <!-- Paso 1: Método de pago -->
+        <div id="contenido-paso1">
+            <h3 style="color: #e91e63; text-align: center;">💳 Método de Pago</h3>
+            <div class="metodos-pago">
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('tarjeta')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Tarjeta">
+                    <p>Tarjeta</p>
+                </div>
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('paypal')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png" alt="PayPal">
+                    <p>PayPal</p>
+                </div>
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('efectivo')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331946.png" alt="Efectivo">
+                    <p>Efectivo</p>
+                </div>
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('transferencia')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/477/477662.png" alt="Transferencia">
+                    <p>Transferencia</p>
+                </div>
+            </div>
+
+            <div id="form-tarjeta" class="formulario-pago">
+                <div class="form-group">
+                    <label>Nombre en tarjeta</label>
+                    <input type="text" id="nombre-tarjeta" required>
+                </div>
+                <div class="form-group">
+                    <label>Número de tarjeta</label>
+                    <input type="text" id="numero-tarjeta" required>
+                </div>
+                <div class="form-group">
+                    <label>Fecha expiración</label>
+                    <input type="text" id="fecha-expiracion" placeholder="MM/AA" required>
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" id="cvv" required>
+                </div>
+            </div>
+            
+            <button class="btn-pagar" onclick="siguientePaso(2)">Continuar</button>
+        </div>
+        
+        <!-- Paso 2: Envío -->
+        <div id="contenido-paso2" style="display: none;">
+            <h3 style="color: #e91e63; text-align: center;">🚚 Información de Envío</h3>
+            
+            <div class="form-group">
+                <label>Dirección de envío</label>
+                <textarea id="direccion-envio" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Ciudad</label>
+                <input type="text" id="ciudad" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Código Postal</label>
+                <input type="text" id="codigo-postal" required>
+            </div>
+            
+            <div class="form-group">
+                <label>País</label>
+                <select id="pais" required>
+                    <option value="">Selecciona un país</option>
+                    <option value="es">España</option>
+                    <option value="mx">México</option>
+                    <option value="ar">Argentina</option>
+                    <option value="co">Colombia</option>
+                    <option value="cl">Chile</option>
+                    <option value="pe">Perú</option>
+                    <option value="es">El Salvador</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Método de envío</label>
+                <select id="metodo-envio" required>
+                    <option value="">Selecciona método</option>
+                    <option value="estandar">Envío estándar (3-5 días) - $5.00</option>
+                    <option value="express">Envío express (1-2 días) - $10.00</option>
+                    <option value="recogida">Recoger en tienda - Gratis</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-pagar" onclick="siguientePaso(1)" style="background-color: #666;">Anterior</button>
+                <button class="btn-pagar" onclick="siguientePaso(3)">Continuar</button>
+            </div>
+        </div>
+        
+        <!-- Paso 3: Confirmación -->
+        <div id="contenido-paso3" style="display: none;">
+            <h3 style="color: #e91e63; text-align: center;">✅ Resumen de Compra</h3>
+            
+            <div style="background-color: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <h4>Método de Pago</h4>
+                <p id="resumen-metodo-pago"></p>
+                
+                <h4 style="margin-top: 15px;">Dirección de Envío</h4>
+                <p id="resumen-direccion"></p>
+                <p id="resumen-ciudad"></p>
+                <p id="resumen-envio"></p>
+            </div>
+            
+            <div style="background-color: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <h4>Productos</h4>
+                <ul id="resumen-productos" style="list-style: none; padding: 0;"></ul>
+                <p style="text-align: right; font-weight: bold;">Total: $<span id="resumen-total">0.00</span></p>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-pagar" onclick="siguientePaso(2)" style="background-color: #666;">Anterior</button>
+                <button class="btn-pagar" onclick="procesarPago()">Confirmar y Pagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secciones -->
+    <section id="inicio" class="active">
+        <div class="articulo">
+            <h2>Bienvenida a ShopDreams</h2>
+            <p>Descubre nuestra selección cuidadosamente curada de productos de belleza y moda. Desde lo último en skincare coreano hasta las prendas más trendy de la temporada, tenemos todo lo que necesitas para verte y sentirte fabulosa. CREADA PARA QUE TE SIENTAS COMO EN CASA</p>
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80" alt="Productos de belleza" />
+        </div>
+        
+        <div class="articulo">
+            <h2>Novedades de la Temporada</h2>
+            <p>Esta temporada traemos las últimas tendencias en moda y belleza. Descubre nuestros productos destacados:</p>
+            
+            <div class="tienda" style="margin-top: 20px;">
+                <div class="producto">
+                    <img src="https://m.media-amazon.com/images/I/81JSinuCjDL._AC_UF894,1000_QL80_.jpg" alt="Vestido floral midi" />
+                    <h3>Vestido Floral Midi</h3>
+                    <p class="precio-original">$60.00</p>
+                    <p class="precio">$22.00</p>
+                    <p>Vestido de verano con estampado floral y corte midi. 100% algodón orgánico.</p>
+                    <div class="cantidad-selector">
+                        <button onclick="modificarCantidad(this, -1)">-</button>
+                        <input type="number" value="1" min="1" class="cantidad">
+                        <button onclick="modificarCantidad(this, 1)">+</button>
+                    </div>
+                    <button onclick="agregarAlCarrito('Vestido Floral Midi', 22, this)">Añadir al carrito</button>
+                </div>
+
+                <div class="producto">
+                    <div class="descuento">-30%</div>
+                    <img src="https://www.elrosalbeauty.com.sv/wp-content/uploads/2022/10/WhatsApp-Image-2022-10-12-at-6.53.01-PM.jpeg" alt="Serum de vitamina C" />
+                    <h3>Serum Vitamina C</h3>
+                    <p class="precio-original">$40.00</p>
+                    <p class="precio">$18.50</p>
+                    <p>Serum antioxidante que ilumina y unifica el tono de la piel. Ideal para todo tipo de pieles.</p>
+                    <div class="cantidad-selector">
+                        <button onclick="modificarCantidad(this, -1)">-</button>
+                        <input type="number" value="1" min="1" class="cantidad">
+                        <button onclick="modificarCantidad(this, 1)">+</button>
+                    </div>
+                    <button onclick="agregarAlCarrito('Serum Vitamina C', 18.5, this)">Añadir al carrito</button>
+                </div>
+
+                <div class="producto">
+                    <img src="https://http2.mlstatic.com/D_NQ_NP_876034-MLM54985023457_052023-O-zapatos-de-tacon-punta-redonda-tira-de-tobillo-nude-talla-25.webp" alt="Tacones nude" />
+                    <h3>Tacones Nude</h3>
+                    <p class="precio">$35.00</p>
+                    <p>Tacones de 8cm en tono nude. Plantilla acolchada para mayor comodidad.</p>
+                    <div class="cantidad-selector">
+                        <button onclick="modificarCantidad(this, -1)">-</button>
+                        <input type="number" value="1" min="1" class="cantidad">
+                        <button onclick="modificarCantidad(this, 1)">+</button>
+                    </div>
+                    <button onclick="agregarAlCarrito('Tacones Nude', 35, this)">Añadir al carrito</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="moda">
+        <h2 class="categoria-titulo">👗 Moda</h2>
+        <p class="categoria-descripcion">Descubre las últimas tendencias en moda para esta temporada. Vestidos, blusas, pantalones y más para completar tu guardarropa.</p>
+        
+        <div class="tienda">
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://cdn.awsli.com.br/2500x2500/2701/2701668/produto/255629613/vestido_midi_de_crepe_estampado_la_dolce_vita_floral_limonada_pink_4491_1_56ea7b-v532a0jrd7.webp" alt="Vestido floral midi" />
+                <h3>Vestido Floral Midi</h3>
+                <p class="precio-original">$50.00</p>
+                <p class="precio">$22.00</p>
+                <p>Vestido de verano con estampado floral y corte midi. 100% algodón orgánico.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Vestido Floral Midi', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://cdn.baguer.co/uploads/2023/09/jean-momfit-de-tiro-alto-derek-azul-823970AZ.jpg_mJlM4HzMeWVZQxeJxeTUQAse1asQc5Xdm4JHdNvqX2EWbnLccz.jpg" alt="Jeans mom fit" />
+                <h3>Jeans Mom Fit</h3>
+                <p class="precio">$32.00</p>
+                <p>Jeans de tiro alto y corte holgado en los muslos. 98% algodón, 2% elastano.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Jeans Mom Fit', 32, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://media.glamour.mx/photos/6190952ca6e030d6480fea92/4:3/w_2284,h_1713,c_limit/187923.jpg" alt="Blusa de seda" />
+                <h3>Blusa de Seda</h3>
+                <p class="precio-original">$53.00</p>
+                <p class="precio">$25.00</p>
+                <p>Blusa elegante de seda 100% natural. Disponible en varios colores.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Blusa de Seda', 25, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://siman.vtexassets.com/arquivos/ids/6195800/104553080-a.jpg?v=638630793529870000" alt="Chaqueta denim" />
+                <h3>Chaqueta Denim</h3>
+                <p class="precio">$32.00</p>
+                <p>Chaqueta clásica de mezclilla con lavado vintage. Corte oversize.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Chaqueta Denim', 32, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-29%</div>
+                <img src="https://ae01.alicdn.com/kf/Se6b1eeeed13c498bb378babcc7b39e24H.jpg" alt="Falda plisada" />
+                <h3>Falda Plisada</h3>
+                <p class="precio-original">$47.00</p>
+                <p class="precio">$25.00</p>
+                <p>Falda midi plisada en tejido fluido. Perfecta para looks casuales o elegantes.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Falda Plisada', 25, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i.pinimg.com/736x/7a/e5/5b/7ae55bb5347e5b2743a5de491b0e9c0d.jpg" alt="Top corto" />
+                <h3>Top Corto</h3>
+                <p class="precio">$12.00</p>
+                <p>Top de tirantes finos con escote en V. Ideal para combinar con jeans o faldas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Top Corto', 12, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/02/16856783428e0cb798f98b9bb07e308605cad8364c_thumbnail_720x.jpg" alt="Blazer elegante" />
+                <h3>Blazer Elegante</h3>
+                <p class="precio">$19.00</p>
+                <p>Blazer de corte moderno con hombreras ligeras. Ideal para looks formales.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Blazer Elegante', 19, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-10%</div>
+                <img src="https://img.ltwebstatic.com/images3_pi/2024/05/31/d6/171712749144f04e0f107cbaafa4a5c804ef5ef38a_thumbnail_720x.jpg" alt="Pantalón palazzo" />
+                <h3>Pantalón Palazzo</h3>
+                <p class="precio-original">$45.00</p>
+                <p class="precio">$30.50</p>
+                <p>Pantalón holgado de tiro alto en tejido fluido. Muy cómodo y elegante.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Pantalón Palazzo', 30.5, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/05/21/1684648571f1c087c2f3bddb0a990be7c2f35cbc4d_thumbnail_720x.jpg" alt="Camisa oversize" />
+                <h3>Camisa Oversize</h3>
+                <p class="precio">$15.00</p>
+                <p>Camisa de algodón en corte oversize. Perfecta para looks relajados.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Camisa Oversize', 35, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://i.pinimg.com/736x/24/b6/13/24b613afc925fc01b794ba3e9f0c5d56.jpg" alt="Jumpsuit negro" />
+                <h3>Jumpsuit Negro</h3>
+                <p class="precio-original">$38.00</p>
+                <p class="precio">$49.30</p>
+                <p>Jumpsuit elegante en tejido ligero. Cinturón incluido para marcar la cintura.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Jumpsuit Negro', 49.3, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i.pinimg.com/736x/a4/1a/7c/a41a7cedb1988e615ed441e6a1c75d59.jpg" alt="Sweater grueso" />
+                <h3>Sweater Grueso</h3>
+                <p class="precio">$22.00</p>
+                <p>Sweater de lana merino para el invierno. Disponible en varios colores.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Sweater Grueso', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://m.media-amazon.com/images/I/81VTVQ1HCxL._UY1000_.jpg" alt="Short denim" />
+                <h3>Short Denim</h3>
+                <p class="precio-original">$30.00</p>
+                <p class="precio">$18.40</p>
+                <p>Short de mezclilla con roturas naturales. Corte high-waist.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Short Denim', 18.4, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://cdn.faire.com/fastly/cc894807cd6710a9c0699a3738e4c2df8cbc15f1560230a2a0f169fb03ecb403.jpeg?bg-color=FFFFFF&dpr=1&fit=crop&format=jpg&height=720&width=720" alt="Vestido de noche" />
+                <h3>Vestido de Noche</h3>
+                <p class="precio">$89.00</p>
+                <p>Vestido largo con detalles de encaje. Perfecto para ocasiones especiales.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Vestido de Noche', 89, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-30%</div>
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/12/28/9b/170373130700336943d3a83b610ec5599464456c45_thumbnail_720x.jpg" alt="Cardigan ligero" />
+                <h3>Cardigan Ligero</h3>
+                <p class="precio-original">$48.00</p>
+                <p class="precio">$33.60</p>
+                <p>Cardigan de punto fino para todas las estaciones. Botones de nácar.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Cardigan Ligero', 33.6, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/05/25/1684978299b0fd09aa8c83eb58f2dd6c0b7ad05030_thumbnail_720x.webp" alt="Top de encaje" />
+                <h3>Top de Encaje</h3>
+                <p class="precio">$20.00</p>
+                <p>Top elegante con detalles de encaje en la espalda. Forro interior.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Top de Encaje', 20, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://img.ltwebstatic.com/images3_pi/2021/08/28/16301226036d6309cf8608d586c5c1eaece26e0b35_thumbnail_720x.jpg" alt="Pantalón de cuero" />
+                <h3>Pantalón de Cuero</h3>
+                <p class="precio-original">$75.00</p>
+                <p class="precio">$36.25</p>
+                <p>Pantalón de cuero vegano con corte recto. Ajuste perfecto.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Pantalón de Cuero', 36.25, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_pi/2022/08/19/1660905328d61d6586913b2eff0d8ed36c28e4aa78_thumbnail_720x.jpg" alt="Camiseta básica" />
+                <h3>Camiseta Básica</h3>
+                <p class="precio">$18.00</p>
+                <p>Camiseta de algodón orgánico en corte clásico. Varios colores disponibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Camiseta Básica', 18, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://img.ltwebstatic.com/images3_pi/2021/10/27/16353452273368737fb0d0d01b89669f7b7b6b43fc_thumbnail_720x.jpg" alt="Chaleco acolchado" />
+                <h3>Chaleco Acolchado</h3>
+                <p class="precio-original">$42.00</p>
+                <p class="precio">$52.70</p>
+                <p>Chaleco ligero para días frescos. Relleno de plumas sintéticas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Chaleco Acolchado', 52.7, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_pi/2022/04/21/1650511736cdc141c486cac8bbf6aab3c9026c80e3_thumbnail_336x.jpg" alt="Falda midi" />
+                <h3>Falda Midi</h3>
+                <p class="precio">$32.00</p>
+                <p>Falda midi en tejido elástico. Corte lápiz para figura estilizada.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Falda Midi', 32, this)">Añadir al carrito</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="belleza">
+        <h2 class="categoria-titulo">💄 Belleza</h2>
+        <p class="categoria-descripcion">Productos de maquillaje de alta calidad para realzar tu belleza natural. Desde bases hasta labiales, todo lo que necesitas para crear looks impresionantes.</p>
+        
+        <div class="tienda">
+            <div class="producto">
+                <div class="descuento">-30%</div>
+                <img src="https://www.elrosalbeauty.com.sv/wp-content/uploads/2022/10/WhatsApp-Image-2022-10-12-at-6.53.01-PM.jpeg" alt="Serum de vitamina C" />
+                <h3>Serum Vitamina C</h3>
+                <p class="precio-original">$40.00</p>
+                <p class="precio">$18.50</p>
+                <p>Serum antioxidante que ilumina y unifica el tono de la piel. Ideal para todo tipo de pieles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Serum Vitamina C', 18.5, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://http2.mlstatic.com/D_Q_NP_829733-MLA83738872822_042025-O.webp" alt="Paleta de sombras" />
+                <h3>Paleta Sombras</h3>
+                <p class="precio">$12.00</p>
+                <p>Paleta de 12 sombras mate y brillantes. Alta pigmentación y larga duración.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Paleta Sombras', 12, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-10%</div>
+                <img src="https://m.media-amazon.com/images/I/61R898Z85AL._UF1000,1000_QL80_.jpg" alt="Base de maquillaje" />
+                <h3>Base Líquida</h3>
+                <p class="precio-original">$40.00</p>
+                <p class="precio">$16.00</p>
+                <p>Base de maquillaje de cobertura media a completa. 12 horas de duración.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Base Líquida', 16, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://www.amorus.com.mx/wp-content/uploads/2021/09/velvety-on-prisms-002.jpg" alt="Labial líquido" />
+                <h3>Labial Líquido</h3>
+                <p class="precio">$18.00</p>
+                <p>Labial de larga duración con acabado mate. No se transfiere ni mancha.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Labial Líquido', 18, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://m.media-amazon.com/images/I/71ScnydEQ+L.jpg" alt="Rubor en crema" />
+                <h3>Rubor en Crema</h3>
+                <p class="precio-original">$20.00</p>
+                <p class="precio">$15.00</p>
+                <p>Rubor cremoso que da un efecto natural. Fácil de difuminar.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Rubor en Crema', 15, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://www.maybelline-ma.com/-/media/project/loreal/brand-sites/mny/americas/latam/tips-and-trends/eye-makeup-tutorials/our-best-mascara-for-sensitive-eyes/product_laydown_lashsensational_us_9_dmi_image_na_no-cta_800x1067.jpg?rev=64f861063e0d436a83c3c4bab4560450" alt="Máscara de pestañas" />
+                <h3>Máscara Pestañas</h3>
+                <p class="precio">$14.00</p>
+                <p>Máscara de pestañas que alarga y volumena sin grumos. Resistente al agua.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Máscara Pestañas', 14, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://maquillame.com.sv/wp-content/uploads/2023/05/IMG-20220620-WA0042-600x600-1.jpg" alt="Corrector" />
+                <h3>Corrector HD</h3>
+                <p class="precio">$22.00</p>
+                <p>Corrector de alta cobertura para ojeras e imperfecciones. Larga duración.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Corrector HD', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://luxorcosmetics.mx/cdn/shop/files/CHAMPAGNEDELIGHT.webp?v=1726173606" alt="Iluminador" />
+                <h3>Iluminador Líquido</h3>
+                <p class="precio-original">$25.00</p>
+                <p class="precio">$20.00</p>
+                <p>Iluminador con partículas de luz para un brillo natural. Fácil de mezclar.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Iluminador Líquido', 20, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://storage.googleapis.com/bucket_sistema/blog/como-elegir-tu-polvo-ideal-compacto-o-suelto.webp" alt="Polvo compacto" />
+                <h3>Polvo Compacto</h3>
+                <p class="precio">$18.00</p>
+                <p>Polvo translúcido para fijar el maquillaje y controlar el brillo.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Polvo Compacto', 18, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://media.istockphoto.com/id/468112252/es/foto/hermosa-modelo-aplicaci%C3%B3n-de-base-con-un-cepillo.jpg?s=612x612&w=0&k=20&c=fhHMm6Pvuk9oHtQYw_650_mU3gihNmY_1unEB__3dho=" alt="Delineador" />
+                <h3>Delineador de Ojos</h3>
+                <p class="precio-original">$16.00</p>
+                <p class="precio">$13.60</p>
+                <p>Delineador de punta fina para trazos precisos. Resistente al agua.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Delineador de Ojos', 13.6, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://montoccosmetictools.com/cdn/shop/files/JUICYLIPS1_7cf87699-b71f-4630-9871-859e5d3ed43b_1080x.jpg?v=1712063306" alt="Gloss labial" />
+                <h3>Gloss Labial</h3>
+                <p class="precio">$8.00</p>
+                <p>Gloss no pegajoso con efecto hidratante. Varios tonos disponibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Gloss Labial', 8, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://aeromall.com.sv/cdn/shop/files/IE75146.png?v=1710973290" alt="Brochas" />
+                <h3>Set de Brochas</h3>
+                <p class="precio-original">$19.00</p>
+                <p class="precio">$33.75</p>
+                <p>Set de 13 brochas profesionales para un maquillaje perfecto.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Set de Brochas', 33.75, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://http2.mlstatic.com/D_Q_NP_867706-MLA82171571021_012025-O.webp" alt="Primer" />
+                <h3>Primer Facial</h3>
+                <p class="precio">$14.00</p>
+                <p>Primer que suaviza la piel y prolonga la duración del maquillaje.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Primer Facial', 14, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-10%</div>
+                <img src="https://walmartsv.vtexassets.com/arquivos/ids/617688/71475_01.jpg?v=638687617670570000" alt="Bronzer" />
+                <h3>Bronzer en Polvo</h3>
+                <p class="precio-original">$26.00</p>
+                <p class="precio">$20.40</p>
+                <p>Bronzer mate para dar calidez al rostro. Fácil de difuminar.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bronzer en Polvo', 20.4, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://pinkcloud.cl/wp-content/uploads/2024/06/D_NQ_NP_2X_833700-MLC69581616678_052023-F.webp" />
+                <h3>Sombra Líquida</h3>
+                <p class="precio">$15.00</p>
+                <p>3 Sombras metálicas de larga duración. Aplicación con dedo o pincel.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Sombra Líquida', 15, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://storage.googleapis.com/bucket_sistema/products/fx-fixer_PKSK01_1718135853_580x630.webp" alt="Fijador" />
+                <h3>Fijador de Maquillaje</h3>
+                <p class="precio-original">$20.00</p>
+                <p class="precio">$16.00</p>
+                <p>Spray fijador para prolongar la duración del maquillaje hasta 16 horas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Fijador de Maquillaje', 16, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://trends.lbel.com/co/wp-content/uploads/sites/5/2019/11/Magazine-Kit-Cejas-2.jpg" alt="Cejas" />
+                <h3>Kit de Cejas</h3>
+                <p class="precio">$11.00</p>
+                <p>Kit completo para definir y rellenar cejas. Incluye plantillas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Kit de Cejas', 11, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-30%</div>
+                <img src="https://m.media-amazon.com/images/I/71hnZ2I5bgL._UF1000,1000_QL80_.jpg" alt="Labial mate" />
+                <h3>Labial Mate</h3>
+                <p class="precio-original">$22.00</p>
+                <p class="precio">$10.40</p>
+                <p>Labial mate de larga duración con fórmula hidratante.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Labial Mate', 15.4, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://kromaspace.com/wp-content/uploads/2024/12/base-barra-bloomshell-bloom-full-cover-3.jpg" alt="Base en barra" />
+                <h3>Base en Barra</h3>
+                <p class="precio">$12.00</p>
+                <p>Base de cobertura completa en formato barra. Fácil aplicación.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Base en Barra', 32, this)">Añadir al carrito</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="skincare">
+        <h2 class="categoria-titulo">🧴 Skincare</h2>
+        <p class="categoria-descripcion">Cuidado profesional para tu piel. Productos formulados con ingredientes activos para mantener tu piel saludable y radiante.</p>
+        
+        <div class="tienda">
+            <div class="producto">
+                <div class="descuento">-30%</div>
+                <img src="https://www.elrosalbeauty.com.sv/wp-content/uploads/2022/10/WhatsApp-Image-2022-10-12-at-6.53.01-PM.jpeg" alt="Serum de vitamina C" />
+                <h3>Serum Vitamina C</h3>
+                <p class="precio-original">$40.00</p>
+                <p class="precio">$18.50</p>
+                <p>Serum antioxidante que ilumina y unifica el tono de la piel. Ideal para todo tipo de pieles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Serum Vitamina C', 28.5, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://www.cerave.mx/-/media/Project/Loreal/Brand%20Sites/CeraVe/Americas/MX/blog-images-oct/crema-para-la-piel.jpg" alt="Crema hidratante" />
+                <h3>Crema Hidratante</h3>
+                <p class="precio">$14.00</p>
+                <p>Hidratante facial con ácido hialurónico. Textura ligera que no obstruye poros.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Crema Hidratante', 24, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://minisomx.vtexassets.com/arquivos/ids/358540/Limpiador-Facial-En-Espuma-Peach-100-ml-Melocot-n-2-32063.jpg?v=638803930469730000" alt="Limpiador facial" />
+                <h3>Limpiador Facial</h3>
+                <p class="precio-original">$20.00</p>
+                <p class="precio">$16.00</p>
+                <p>Limpiador suave que elimina impurezas sin resecar la piel. pH balanceado.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Limpiador Facial', 16, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://m.media-amazon.com/images/I/710K0dHqkuL._UF1000,1000_QL80_.jpg" alt="Protector solar" />
+                <h3>Protector Solar</h3>
+                <p class="precio">$10.00</p>
+                <p>Protector solar facial FPS 50+. Textura ligera y no grasa. Resistente al agua.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Protector Solar', 20, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://m.media-amazon.com/images/I/6167W+wK5iL._UF1000,1000_QL80_.jpg" alt="Exfoliante químico" />
+                <h3>Exfoliante Químico</h3>
+                <p class="precio-original">$26.00</p>
+                <p class="precio">$22.00</p>
+                <p>Exfoliante con AHA y BHA para renovar la piel sin irritación. Uso nocturno.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Exfoliante Químico', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://belcorp.vtexassets.com/arquivos/ids/7107733-800-800?v=638549621073970000&width=800&height=800&aspect=true" alt="Mascarilla facial" />
+                <h3>Mascarilla Facial</h3>
+                <p class="precio">$3.00</p>
+                <p>Mascarilla de arcilla para purificar pieles grasas y mixtas. Elimina toxinas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Mascarilla Facial', 12, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://montoccosmetictools.com/cdn/shop/files/MG_5584_1.jpg?v=1719603363" alt="Tónico facial" />
+                <h3>Tónico Facial</h3>
+                <p class="precio">$18.00</p>
+                <p>Tónico equilibrador con ingredientes naturales. Refresca y prepara la piel.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Tónico Facial', 18, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-10%</div>
+                <img src="https://www.cerave.com.ec/-/media/project/loreal/brand-sites/cerave/americas/ec/new_product_700x875/hidratantes/crema-reparadora-para-el-contorno-de-ojos-14ml/3337875597272_7.jpg?rev=-1" alt="Contorno de ojos" />
+                <h3>Contorno de Ojos</h3>
+                <p class="precio-original">$28.00</p>
+                <p class="precio">$15.20</p>
+                <p>Crema para contorno de ojos que reduce bolsas y ojeras. Efecto refrescante.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Contorno de Ojos', 25.2, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://almalatina.yanbal.com/wp-content/uploads/2021/02/oleo-concentrado-reparacion-profunda-yanbal.jpg" alt="Aceite facial" />
+                <h3>Aceite Facial</h3>
+                <p class="precio">$22.00</p>
+                <p>Aceite nutritivo con vitamina E para pieles secas. Absorción rápida.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Aceite Facial', 32, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRfSQqxu31sEacM0ITS4_cQ9bN7G8gkbXYHfg&s" alt="Agua micelar" />
+                <h3>Agua Micelar</h3>
+                <p class="precio-original">$18.00</p>
+                <p class="precio">$13.50</p>
+                <p>Agua micelar para desmaquillar y limpiar la piel en un solo paso.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Agua Micelar', 13.5, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://sevilla.abc.es/estilo/bulevarsur/wp-content/uploads/sites/14/2020/10/balsamo-desmaquillante-clinique-p.jpg" alt="Bálsamo limpiador" />
+                <h3>Bálsamo Limpiador</h3>
+                <p class="precio">$14.00</p>
+                <p>Bálsamo que se transforma en aceite para una limpieza profunda pero suave.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bálsamo Limpiador', 24, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://xclaim.vtexassets.com/arquivos/ids/161004/103099147_2.jpg?v=637746694493370000" alt="Serum retinol" />
+                <h3>Serum de Retinol</h3>
+                <p class="precio-original">$38.00</p>
+                <p class="precio">$32.30</p>
+                <p>Serum con retinol para reducir arrugas y mejorar la textura de la piel.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Serum de Retinol', 32.3, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_860769-MLA79105733104_092024-O.webp" alt="Mascarilla hidratante" />
+                <h3>Mascarilla Hidratante</h3>
+                <p class="precio">$4.00</p>
+                <p>Mascarilla en lámina con ácido hialurónico para hidratación intensiva.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Mascarilla Hidratante', 15, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://www.cerave.uy/-/media/project/loreal/brand-sites/cerave/americas/uy/new-product/new_product_700x875/limpieza/gel-limpiador-espumoso-473ml/3337875597357.jpg?rev=-1" alt="Gel limpiador" />
+                <h3>Gel Limpiador</h3>
+                <p class="precio-original">$22.00</p>
+                <p class="precio">$7.60</p>
+                <p>Gel limpiador espumoso para pieles grasas. Controla el exceso de sebo.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Gel Limpiador', 17.6, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i.ebayimg.com/images/g/7W8AAOSwl0xlqNUy/s-l1200.jpg" alt="Crema de noche" />
+                <h3>Crema de Noche</h3>
+                <p class="precio">$24.00</p>
+                <p>Crema regeneradora con péptidos para usar durante la noche.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Crema de Noche', 34, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-30%</div>
+                <img src="https://m.media-amazon.com/images/I/71JBqMEcioL._UF894,1000_QL80_.jpg" alt="Roll-on contorno" />
+                <h3>Roll-on Contorno</h3>
+                <p class="precio-original">$20.00</p>
+                <p class="precio">$11.00</p>
+                <p>Roll-on refrescante para el contorno de ojos con efecto desinflamante.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Roll-on Contorno', 14, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://e00-elmundo.uecdn.es/assets/multimedia/imagenes/2021/10/07/16336197926655.jpg" alt="Esponja konjac" />
+                <h3>Esponja Konjac</h3>
+                <p class="precio">$12.00</p>
+                <p>3 Esponjas naturales para limpieza facial suave. Ideal para pieles sensibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Esponja Konjac', 12, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://i.pinimg.com/736x/71/ca/8d/71ca8de7594ae7abd6d7d677daae9d78.jpg" alt="Kit viaje" />
+                <h3>Kit de Viaje</h3>
+                <p class="precio-original">$35.00</p>
+                <p class="precio">$23.75</p>
+                <p>Kit completo con productos mini para mantener tu rutina de skincare en viajes.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Kit de Viaje', 33.75, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i5.walmartimages.com/seo/The-Ordinary-Niacinamide-10-Zinc-1-Serum-1-oz_61c6af8b-e63f-4117-bc2f-975cfaabcec0.71104854b4cfdafc3c56a544c1ab9ee4.jpeg" alt="Serum niacinamida" />
+                <h3>Serum Niacinamida</h3>
+                <p class="precio">$18.00</p>
+                <p>Serum para controlar el exceso de grasa y minimizar poros dilatados.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Serum Niacinamida', 28, this)">Añadir al carrito</button>
+            </div>
+        </div>
+        
+        <div class="articulo">
+            <h2>🧴 Guía Básica de Skincare</h2>
+            <p>Una rutina de skincare efectiva no necesita ser complicada. Sigue estos pasos esenciales para mantener tu piel saludable:</p>
+            <h3>1. Limpieza</h3>
+            <p>Usa un limpiador suave mañana y noche para eliminar impurezas sin dañar la barrera cutánea.</p>
+            <h3>2. Hidratación</h3>
+            <p>Aplica una crema hidratante adecuada a tu tipo de piel. Pieles grasas pueden usar geles, mientras las secas necesitan texturas más ricas.</p>
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80" alt="Rutina de skincare" />
+        </div>
+    </section>
+
+    <section id="accesorios">
+        <h2 class="categoria-titulo">👜 Accesorios</h2>
+        <p class="categoria-descripcion">Complementa tus looks con nuestros accesorios de moda. Bolsos, joyería, gafas de sol y más para dar el toque final perfecto.</p>
+        
+        <div class="tienda">
+            <div class="producto">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_876034-MLM54985023457_052023-O-zapatos-de-tacon-punta-redonda-tira-de-tobillo-nude-talla-25.webp" alt="Tacones nude" />
+                <h3>Tacones Nude</h3>
+                <p class="precio">$35.00</p>
+                <p>Tacones de 8cm en tono nude. Plantilla acolchada para mayor comodidad.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Tacones Nude', 55, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-10%</div>
+                <img src="https://i.etsystatic.com/14982558/r/il/cca690/5578818897/il_fullxfull.5578818897_d0dt.jpg" alt="Bolso de mano" />
+                <h3>Bolso de Mano</h3>
+                <p class="precio-original">$53.00</p>
+                <p class="precio">$28.00</p>
+                <p>Bolso mediano con correa ajustable. Múltiples compartimentos internos.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bolso de Mano', 48, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://m.media-amazon.com/images/I/51xdUFIacEL._AC_SL1500_.jpg" alt="Collar dorado" />
+                <h3>Collar Dorado</h3>
+                <p class="precio">$21.00</p>
+                <p>Collar fino de baño dorado con dije minimalista. Acero quirúrgico.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Collar Dorado', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://cdn.aarp.net/content/dam/aarp/health/healthy-living/2019/04/1140-sunglasses-esp.jpg" alt="Gafas de sol" />
+                <h3>Gafas de Sol</h3>
+                <p class="precio-original">$17.00</p>
+                <p class="precio">$15.00</p>
+                <p>Gafas de sol con protección UV400. Estilo aviador en varios colores.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Gafas de Sol', 35, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i.pinimg.com/474x/06/ac/f5/06acf510e485ce3cd946640cd22e769d.jpg" alt="Reloj de pulsera" />
+                <h3>Reloj de Pulsera</h3>
+                <p class="precio">$25.00</p>
+                <p>Reloj analógico con correa de cuero genuino. Resistente al agua.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Reloj de Pulsera', 65, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i.pinimg.com/736x/83/59/a2/8359a24e0eb644b8132052eb20b2ce98.jpg" alt="Bufanda de seda" />
+                <h3>Bufanda de Seda</h3>
+                <p class="precio">$18.00</p>
+                <p>Bufanda ligera de seda 100% con estampado floral. Perfecta para todas las estaciones.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bufanda de Seda', 28, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://m.media-amazon.com/images/I/51suXh01JMS._AC_.jpg" alt="Bandana" />
+                <h3>Bandana Estampada</h3>
+                <p class="precio">$15.00</p>
+                <p>2 Bandanas de algodón con estampado vintage. Múltiples usos.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bandana Estampada', 15, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://i.pinimg.com/474x/a3/8f/69/a38f6936653c7e0b001e9fdeb17efac8.jpg" alt="Cinturón" />
+                <h3>Cinturón de Cuero</h3>
+                <p class="precio-original">$22.00</p>
+                <p class="precio">$19.20</p>
+                <p>Cinturón de cuero genuino con hebilla dorada. Varios colores disponibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Cinturón de Cuero', 27.2, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/01/03/1672714432fb5661a4260d53fba02195ccad1d7dc9_thumbnail_720x.jpg" alt="Pulseras" />
+                <h3>Set de Pulseras</h3>
+                <p class="precio">$18.00</p>
+                <p>Set de 3 pulseras finas para combinar o usar por separado.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Set de Pulseras', 18, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/01/03/167271377098eeacae9d5101b1946687e44cf40404_thumbnail_720x.jpg" alt="Sombrero" />
+                <h3>Sombrero de Paja</h3>
+                <p class="precio-original">$25.00</p>
+                <p class="precio">$20.00</p>
+                <p>Sombrero de ala ancha para protegerte del sol con estilo.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Sombrero de Paja', 20, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://m.media-amazon.com/images/I/71AdTkjS+8L._AC_SL1500_.jpg" alt="Gorra" />
+                <h3>Gorra de Béisbol</h3>
+                <p class="precio">$19.00</p>
+                <p>Gorra ajustable con diseño minimalista. Ideal para looks casuales.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Gorra de Béisbol', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-10%</div>
+                <img src="https://i.pinimg.com/736x/fc/d3/f5/fcd3f5645859c2fb38f38d6a74e9f079.jpg" alt="Mochila" />
+                <h3>Mochila Pequeña</h3>
+                <p class="precio-original">$25.00</p>
+                <p class="precio">$20.50</p>
+                <p>Mochila compacta con múltiples bolsillos. Ideal para el día a día.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Mochila Pequeña', 40.5, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://i.pinimg.com/736x/3a/70/11/3a70110e19bd59177a9c2cbe86dcec0a.jpg" alt="Pañuelo" />
+                <h3>Pañuelo de Seda</h3>
+                <p class="precio">$19.00</p>
+                <p>Pañuelo cuadrado de seda con estampado. Múltiples usos.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Pañuelo de Seda', 19, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-25%</div>
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/06/1688620901d9005b3909b90c4790e45ea8831424da_thumbnail_720x.jpg" alt="Cartera" />
+                <h3>Cartera Compacta</h3>
+                <p class="precio-original">$26.00</p>
+                <p class="precio">$25.25</p>
+                <p>Cartera pequeña con múltiples ranuras para tarjetas y monedero.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Cartera Compacta', 26.25, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/06/16860414960de41c69a05b7343c5e5ac0a08621897_thumbnail_720x.jpg" alt="Anillos" />
+                <h3>Set de Anillos</h3>
+                <p class="precio">$20.00</p>
+                <p>Set de 8 anillos minimalistas en diferentes diseños.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Set de Anillos', 15, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/10/25/0b/1698214347bcfbf867ecb79f6bbe23829e4dd8f7b5_thumbnail_720x.jpg" alt="Pendientes" />
+                <h3>Pendientes de Aro</h3>
+                <p class="precio-original">$18.00</p>
+                <p class="precio">$13.30</p>
+                <p>Aros dorados de diferentes tamaños. Acero quirúrgico.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Pendientes de Aro', 15.3, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/12/04/8c/1701702546f4464f3b9e225d3395445a9663f526ff_thumbnail_720x.jpg" alt="Gorra" />
+                <h3>Gorra de Lana</h3>
+                <p class="precio">$14.00</p>
+                <p>Gorra tejida en lana merino para el invierno. Varios colores.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Gorra de Lana', 24, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-20%</div>
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/03/168835549741d83398ec3405efa71a590474ee4d86_thumbnail_336x.jpg" alt="Bolso" />
+                <h3>Bolso Bandolera</h3>
+                <p class="precio-original">$35.00</p>
+                <p class="precio">$24.00</p>
+                <p>Bolso bandolera en cuero vegano. Compartimento principal con cierre.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bolso Bandolera', 44, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://m.media-amazon.com/images/I/71VRlsAmEML._UY300_.jpg" alt="Broche" />
+                <h3>Broche Decorativo</h3>
+                <p class="precio">$9.99</p>
+                <p>Broche metálico con diseño floral para personalizar tus prendas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Broche Decorativo', 12, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-30%</div>
+                <img src="https://img.ltwebstatic.com/images3_spmp/2024/03/02/a6/1709344042661070e77d29d28460fde2dc22927caf_thumbnail_720x.jpg" alt="Necklace" />
+                <h3>Collar Largo</h3>
+                <p class="precio-original">$18.00</p>
+                <p class="precio">$15.60</p>
+                <p>Collar largo con dije geométrico. Ajustable a diferentes longitudes.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Collar Largo', 19.6, this)">Añadir al carrito</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="consejos">
+        <div class="articulo">
+            <h2>💡 Nuestros Mejores Consejos</h2>
+            <div class="consejos-texto">
+                <div class="consejo">
+                    <h3>🌸 Cómo Combinar Colores en tu Vestuario</h3>
+                    <p>1. Comienza con una paleta base de 3-4 colores que te favorezcan y combinen entre sí.</p>
+                    <p>2. Usa la regla 60-30-10: 60% color dominante, 30% secundario y 10% de acento.</p>
+                    <p>3. Los tonos neutros (negro, blanco, beige, gris) funcionan como base para cualquier look.</p>
+                    <p>4. Para combinaciones atrevidas, usa la rueda de colores: los opuestos (complementarios) crean contrastes vibrantes.</p>
+                </div>
+                <div class="consejo">
+                    <h3>💄 Maquillaje para Principiantes</h3>
+                    <p>1. Invierte en buenas herramientas: una esponja beauty blender y brochas básicas hacen la diferencia.</p>
+                    <p>2. La preparación de la piel es clave: limpia, hidrata y aplica primer antes del maquillaje.</p>
+                    <p>3. Empieza con productos multitarea: un BB cream, máscara de pestañas y gloss pueden ser suficientes.</p>
+                    <p>4. Practica la técnica "menos es más" - es mejor corregir poco que exagerar.</p>
+                </div>
+            </div>
+            <div class="consejos-imagenes">
+                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80" alt="Combinación de colores en moda" />
+                <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=600&q=80" alt="Maquillaje básico" />
+                <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=600&q=80" alt="Productos de belleza" />
+            </div>
+        </div>
+        
+        <div class="articulo">
+            <h2>🧴 Consejos de Skincare por Tipo de Piel</h2>
+            <div class="consejos-texto">
+                <div class="consejo">
+                    <h3>Piel Grasa</h3>
+                    <p>1. Usa limpiadores con ácido salicílico o tea tree oil.</p>
+                    <p>2. Hidrata con geles ligeros sin aceite.</p>
+                    <p>3. No evites los aceites por completo - el aceite de jojoba puede ayudar a regular la producción sebácea.</p>
+                    <p>4. Usa mascarillas de arcilla 1-2 veces por semana.</p>
+                </div>
+                <div class="consejo">
+                    <h3>Piel Seca</h3>
+                    <p>1. Limpia con productos cremosos sin sulfatos.</p>
+                    <p>2. Aplica sueros con ácido hialurónico sobre piel húmeda.</p>
+                    <p>3. Usa cremas con ceramidas y mantecas naturales.</p>
+                    <p>4. Evita el agua muy caliente al lavarte la cara.</p>
+                </div>
+                <div class="consejo">
+                    <h3>Piel Mixta</h3>
+                    <p>1. Usa productos equilibrados para no resecar ni engrasar.</p>
+                    <p>2. Aplica tratamientos diferentes en zonas T y mejillas si es necesario.</p>
+                    <p>3. Exfolia suavemente 2-3 veces por semana.</p>
+                    <p>4. Usa hidratantes ligeras pero efectivas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <div class="articulo">
+            <h2>📬 Contacta con Nosotros</h2>
+            <p>¿Tienes preguntas sobre nuestros productos o necesitas asesoramiento personalizado? Estamos aquí para ayudarte.</p>
+            <h3>Información de Contacto</h3>
+            <p>📧 Email: info@shopdreams.com</p>
+            <p>📞 Teléfono: +503 1456 6789</p>
+            <p>📍 Dirección: Colonia escalón,7 avenida norte San salvador </p>
+            <h3>Horario de Atención</h3>
+            <p>Lunes a Viernes: 9:00 - 18:00</p>
+            <p>Sábados: 10:00 - 14:00</p>
+            <img src="https://marketplace.canva.com/EAGTwJEXRhU/1/0/900w/canva-fondo-pantalla-para-tel%C3%A9fono-estrella-rosa-brillos-4u91KP5cKvs.jpg" alt="Contacto moda y belleza" />
+        </div>
+    </section>
+
+    <footer>
+        <div class="social-icons">
+            <a href="#" aria-label="Instagram">📸</a>
+            <a href="#" aria-label="TikTok">🎵</a>
+            <a href="#" aria-label="Pinterest">📌</a>
+            <a href="#" aria-label="Facebook">👍</a>
+        </div>
+        <p>&copy; 2025 ShopDreams | Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+        let carrito = [];
+        let metodoPagoSeleccionado = null;
+        let pasoActual = 1;
+        let infoEnvio = {};
+
+        // Mostrar sección activa
+        function mostrarSeccion(id) {
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            document.getElementById(id).classList.add('active');
+            
+            // Scroll suave a la sección
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Inicializar mostrando la sección de inicio
+        document.addEventListener('DOMContentLoaded', function() {
+            mostrarSeccion('inicio');
+        });
+
+        // Función para modificar la cantidad de productos
+        function modificarCantidad(boton, cambio) {
+            const contenedor = boton.closest('.cantidad-selector');
+            const input = contenedor.querySelector('.cantidad');
+            let cantidad = parseInt(input.value);
+            
+            cantidad += cambio;
+            
+            if (cantidad < 1) cantidad = 1;
+            
+            input.value = cantidad;
+        }
+
+        function agregarAlCarrito(nombre, precio, boton) {
+            const contenedor = boton.closest('.producto');
+            const cantidad = parseInt(contenedor.querySelector('.cantidad').value);
+            
+            const productoExistente = carrito.find(item => item.nombre === nombre);
+            
+            if (productoExistente) {
+                productoExistente.cantidad += cantidad;
+            } else {
+                carrito.push({
+                    nombre: nombre,
+                    precio: precio,
+                    cantidad: cantidad
+                });
+            }
+            
+            actualizarCarrito();
+            
+            // Animación de notificación
+            const notificacion = document.createElement('div');
+            notificacion.textContent = `✔ ${nombre} (${cantidad}) añadido al carrito`;
+            notificacion.style.position = 'fixed';
+            notificacion.style.bottom = '20px';
+            notificacion.style.right = '20px';
+            notificacion.style.backgroundColor = '#4CAF50';
+            notificacion.style.color = 'white';
+            notificacion.style.padding = '15px';
+            notificacion.style.borderRadius = '5px';
+            notificacion.style.zIndex = '1000';
+            notificacion.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            notificacion.style.animation = 'fadeIn 0.5s, float 3s 0.5s infinite';
+            document.body.appendChild(notificacion);
+            
+            setTimeout(() => {
+                notificacion.style.transition = 'opacity 0.5s';
+                notificacion.style.opacity = '0';
+                setTimeout(() => document.body.removeChild(notificacion), 500);
+            }, 3000);
+        }
+
+        function actualizarCarrito() {
+            const listaCarrito = document.getElementById("lista-carrito");
+            const totalElement = document.getElementById("total");
+            const btnFinalizar = document.getElementById("btn-finalizar-compra");
+            let total = 0;
+            
+            listaCarrito.innerHTML = "";
+            
+            if (carrito.length === 0) {
+                listaCarrito.innerHTML = "<li>Tu carrito está vacío</li>";
+                btnFinalizar.disabled = true;
+            } else {
+                carrito.forEach(item => {
+                    const li = document.createElement("li");
+                    li.textContent = `${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}`;
+                    
+                    const botonEliminar = document.createElement("button");
+                    botonEliminar.textContent = "❌";
+                    botonEliminar.onclick = () => eliminarDelCarrito(item.nombre);
+                    li.appendChild(botonEliminar);
+                    listaCarrito.appendChild(li);
+                    
+                    total += item.precio * item.cantidad;
+                });
+                btnFinalizar.disabled = false;
+            }
+            
+            totalElement.textContent = `Total: $${total.toFixed(2)}`;
+            
+            // Actualizar total en el cajero
+            if (document.getElementById('total-pagar')) {
+                document.getElementById('total-pagar').textContent = total.toFixed(2);
+            }
+            
+            // Animación al actualizar carrito
+            if (carrito.length > 0) {
+                listaCarrito.style.animation = 'fadeIn 0.5s';
+                totalElement.style.animation = 'pulse 0.5s';
+                setTimeout(() => totalElement.style.animation = '', 500);
+            }
+        }
+
+        function eliminarDelCarrito(nombre) {
+            const itemIndex = carrito.findIndex(item => item.nombre === nombre);
+            if (itemIndex !== -1) {
+                // Animación de eliminación
+                const listaItems = document.querySelectorAll('#lista-carrito li');
+                listaItems[itemIndex].style.animation = 'shake 0.5s, fadeOut 0.5s';
+                
+                setTimeout(() => {
+                    carrito.splice(itemIndex, 1);
+                    actualizarCarrito();
+                }, 500);
+            }
+        }
+
+        // Funciones del cajero
+        function mostrarCajero() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('cajero').style.display = 'block';
+            document.getElementById('total-pagar').textContent = 
+                document.getElementById('total').textContent.split('$')[1];
+            
+            // Resetear pasos
+            pasoActual = 1;
+            actualizarPasos();
+            
+            // Animación de aparición
+            document.getElementById('cajero').style.animation = 'fadeIn 0.5s';
+        }
+
+        function cerrarCajero() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('cajero').style.animation = 'fadeOut 0.5s';
+            setTimeout(() => {
+                document.getElementById('cajero').style.display = 'none';
+                document.getElementById('cajero').style.animation = '';
+            }, 500);
+        }
+
+        function seleccionarMetodoPago(metodo) {
+            metodoPagoSeleccionado = metodo;
+            
+            // Resetear selección
+            document.querySelectorAll('.metodo-pago').forEach(el => {
+                el.classList.remove('seleccionado');
+            });
+            
+            // Marcar seleccionado con animación
+            event.currentTarget.classList.add('seleccionado');
+            
+            // Mostrar formulario correspondiente
+            if (metodo === 'tarjeta') {
+                document.getElementById('form-tarjeta').style.display = 'block';
+                document.getElementById('form-tarjeta').style.animation = 'fadeIn 0.5s';
+            } else {
+                document.getElementById('form-tarjeta').style.display = 'none';
+            }
+        }
+
+        function actualizarPasos() {
+            // Ocultar todos los pasos
+            document.getElementById('contenido-paso1').style.display = 'none';
+            document.getElementById('contenido-paso2').style.display = 'none';
+            document.getElementById('contenido-paso3').style.display = 'none';
+            
+            // Mostrar paso actual
+            document.getElementById(`contenido-paso${pasoActual}`).style.display = 'block';
+            
+            // Actualizar estado de los pasos
+            document.querySelectorAll('.paso').forEach((paso, index) => {
+                paso.classList.remove('activo', 'completado');
+                
+                if (index + 1 === pasoActual) {
+                    paso.classList.add('activo');
+                } else if (index + 1 < pasoActual) {
+                    paso.classList.add('completado');
+                }
+            });
+        }
+
+        function siguientePaso(nuevoPaso) {
+            // Validar paso actual antes de avanzar
+            if (pasoActual === 1 && !metodoPagoSeleccionado) {
+                // Animación de error
+                const cajero = document.getElementById('cajero');
+                cajero.style.animation = 'shake 0.5s';
+                setTimeout(() => cajero.style.animation = '', 500);
+                alert('Por favor selecciona un método de pago');
+                return;
+            }
+            
+            if (pasoActual === 1 && metodoPagoSeleccionado === 'tarjeta') {
+                const nombre = document.getElementById('nombre-tarjeta').value;
+                const numero = document.getElementById('numero-tarjeta').value;
+                const fecha = document.getElementById('fecha-expiracion').value;
+                const cvv = document.getElementById('cvv').value;
+                
+                if (!nombre || !numero || !fecha || !cvv) {
+                    // Animación de error en campos
+                    const form = document.getElementById('form-tarjeta');
+                    form.style.animation = 'shake 0.5s';
+                    setTimeout(() => form.style.animation = '', 500);
+                    
+                    alert('Por favor completa todos los campos de la tarjeta');
+                    return;
+                }
+            }
+            
+            if (pasoActual === 2) {
+                // Guardar información de envío
+                infoEnvio = {
+                    direccion: document.getElementById('direccion-envio').value,
+                    ciudad: document.getElementById('ciudad').value,
+                    codigoPostal: document.getElementById('codigo-postal').value,
+                    pais: document.getElementById('pais').value,
+                    metodoEnvio: document.getElementById('metodo-envio').value
+                };
+                
+                // Validar campos de envío
+                if (!infoEnvio.direccion || !infoEnvio.ciudad || !infoEnvio.codigoPostal || !infoEnvio.pais || !infoEnvio.metodoEnvio) {
+                    alert('Por favor completa toda la información de envío');
+                    return;
+                }
+                
+                // Actualizar resumen
+                document.getElementById('resumen-metodo-pago').textContent = metodoPagoSeleccionado === 'tarjeta' ? 'Pago con Tarjeta' : 
+                    metodoPagoSeleccionado === 'paypal' ? 'Pago con PayPal' : 
+                    metodoPagoSeleccionado === 'efectivo' ? 'Pago en Efectivo' : 'Transferencia Bancaria';
+                
+                document.getElementById('resumen-direccion').textContent = infoEnvio.direccion;
+                document.getElementById('resumen-ciudad').textContent = `${infoEnvio.ciudad}, ${infoEnvio.codigoPostal}`;
+                document.getElementById('resumen-envio').textContent = `Método: ${infoEnvio.metodoEnvio}`;
+                
+                // Actualizar lista de productos
+                const resumenProductos = document.getElementById('resumen-productos');
+                resumenProductos.innerHTML = '';
+                
+                carrito.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}`;
+                    resumenProductos.appendChild(li);
+                });
+                
+                document.getElementById('resumen-total').textContent = 
+                    document.getElementById('total').textContent.split('$')[1];
+            }
+            
+            pasoActual = nuevoPaso;
+            actualizarPasos();
+        }
+
+        function procesarPago() {
+            // Animación de procesamiento
+            const btnPagar = document.querySelector('.btn-pagar');
+            btnPagar.disabled = true;
+            btnPagar.innerHTML = 'Procesando... <i class="fa fa-spinner fa-spin"></i>';
+            btnPagar.style.animation = 'pulse 1s infinite';
+            
+            // Simular procesamiento de pago
+            setTimeout(() => {
+                btnPagar.style.animation = '';
+                btnPagar.innerHTML = 'Pago Exitoso!';
+                btnPagar.style.backgroundColor = '#4CAF50';
+                
+                setTimeout(() => {
+                    // Animación de confirmación
+                    cerrarCajero();
+                    
+                    // Notificación de éxito
+                    const notificacion = document.createElement('div');
+                    notificacion.textContent = '✅ Compra realizada con éxito!';
+                    notificacion.style.position = 'fixed';
+                    notificacion.style.bottom = '20px';
+                    notificacion.style.left = '50%';
+                    notificacion.style.transform = 'translateX(-50%)';
+                    notificacion.style.backgroundColor = '#4CAF50';
+                    notificacion.style.color = 'white';
+                    notificacion.style.padding = '15px 30px';
+                    notificacion.style.borderRadius = '5px';
+                    notificacion.style.zIndex = '1000';
+                    notificacion.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+                    notificacion.style.animation = 'fadeIn 0.5s, float 3s 0.5s infinite';
+                    document.body.appendChild(notificacion);
+                    
+                    setTimeout(() => {
+                        notificacion.style.opacity = '0';
+                        setTimeout(() => document.body.removeChild(notificacion), 500);
+                    }, 3000);
+                    
+                    // Resetear todo
+                    carrito = [];
+                    actualizarCarrito();
+                    metodoPagoSeleccionado = null;
+                    document.querySelectorAll('.metodo-pago').forEach(el => {
+                        el.classList.remove('seleccionado');
+                    });
+                    document.getElementById('form-tarjeta').style.display = 'none';
+                    document.getElementById('form-tarjeta').reset();
+                    btnPagar.innerHTML = 'Pagar $<span id="total-pagar">0.00</span>';
+                    btnPagar.style.backgroundColor = '#e91e63';
+                    btnPagar.disabled = false;
+                    
+                    // Resetear pasos
+                    pasoActual = 1;
+                    actualizarPasos();
+                }, 1000);
+            }, 2000);
+        }
+
+        // Inicializar carrito
+        actualizarCarrito();
+    </script>
+</body>
+</html>
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
 
