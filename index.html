@@ -146,6 +146,32 @@
             z-index: 1;
         }
         
+        .agotado {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #666;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            z-index: 1;
+        }
+        
+        .ultimas-unidades {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ff9800;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            z-index: 1;
+        }
+        
         .precio-original {
             text-decoration: line-through;
             color: #999;
@@ -236,6 +262,11 @@
         
         .producto button:active {
             transform: translateY(1px);
+        }
+        
+        .producto button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
         }
         
         #carrito {
@@ -881,6 +912,7 @@
                 </div>
 
                 <div class="producto">
+                    <div class="ultimas-unidades">Últimas unidades</div>
                     <img src="https://http2.mlstatic.com/D_NQ_NP_876034-MLM54985023457_052023-O-zapatos-de-tacon-punta-redonda-tira-de-tobillo-nude-talla-25.webp" alt="Tacones nude" />
                     <h3>Tacones Nude</h3>
                     <p class="precio">$35.00</p>
@@ -986,7 +1018,7 @@
             </div>
 
             <div class="producto">
-                <img src="https://img.ltwebstatic.com/images3_spmp/2023/06/02/16856783428e0cb798f98b9bb07e308605cad8364c_thumbnail_720x.jpg" alt="Blazer elegante" />
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/06/02/16856783428e0cb798f98b9bb07e308605cad8364c_thumbnail_720x.jpg" alt="Blazer elegante" />
                 <h3>Blazer Elegante</h3>
                 <p class="precio">$19.00</p>
                 <p>Blazer de corte moderno con hombreras ligeras. Ideal para looks formales.</p>
@@ -1014,7 +1046,7 @@
             </div>
 
             <div class="producto">
-                <img src="https://img.ltwebstatic.com/images3_pi/2023/05/21/1684648571f1c087c2f3bddb0a990be7c2f35cbc4d_thumbnail_720x.jpg" alt="Camisa oversize" />
+                <img src="https://img.ltwebstatic.com/images3_pi/2023/05/21/1684648571f1c087c2f3bddb0a990be7c2f35cbc4d_thumbnail_720x.webp" alt="Camisa oversize" />
                 <h3>Camisa Oversize</h3>
                 <p class="precio">$15.00</p>
                 <p>Camisa de algodón en corte oversize. Perfecta para looks relajados.</p>
@@ -1718,7 +1750,7 @@
             <p>Usa un limpiador suave mañana y noche para eliminar impurezas sin dañar la barrera cutánea.</p>
             <h3>2. Hidratación</h3>
             <p>Aplica una crema hidratante adecuada a tu tipo de piel. Pieles grasas pueden usar geles, mientras las secas necesitan texturas más ricas.</p>
-            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80" alt="Rutina de skincare" />
+            <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80" alt="Rutina de skincare" />
         </div>
     </section>
 
@@ -1728,6 +1760,7 @@
         
         <div class="tienda">
             <div class="producto">
+                <div class="ultimas-unidades">Últimas unidades</div>
                 <img src="https://http2.mlstatic.com/D_NQ_NP_876034-MLM54985023457_052023-O-zapatos-de-tacon-punta-redonda-tira-de-tobillo-nude-talla-25.webp" alt="Tacones nude" />
                 <h3>Tacones Nude</h3>
                 <p class="precio">$35.00</p>
@@ -1838,21 +1871,21 @@
             </div>
 
             <div class="producto">
-                <img src="https://img.ltwebstatic.com/images3_pi/2023/01/03/1672714432fb5661a4260d53fba02195ccad1d7dc9_thumbnail_720x.jpg" alt="Pulseras" />
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/09/04/54/169380481555f63d9c20d2265ae0cebe2fa8587dbf_thumbnail_720x.jpg" alt="Pulseras" />
                 <h3>Set de Pulseras</h3>
-                <p class="precio">$18.00</p>
-                <p>Set de 3 pulseras finas para combinar o usar por separado.</p>
+                <p class="precio">$25.00</p>
+                <p>Set de 4 pulseras finas para combinar o usar por separado.</p>
                 <div class="cantidad-selector">
                     <button onclick="modificarCantidad(this, -1)">-</button>
                     <input type="number" value="1" min="1" class="cantidad">
                     <button onclick="modificarCantidad(this, 1)">+</button>
                 </div>
-                <button onclick="agregarAlCarrito('Set de Pulseras', 18, this)">Añadir al carrito</button>
+                <button onclick="agregarAlCarrito('Set de Pulseras', 25, this)">Añadir al carrito</button>
             </div>
 
             <div class="producto">
                 <div class="descuento">-20%</div>
-                <img src="https://img.ltwebstatic.com/images3_pi/2023/01/03/167271377098eeacae9d5101b1946687e44cf40404_thumbnail_720x.jpg" alt="Sombrero" />
+                <img src="https://i.pinimg.com/736x/93/ea/13/93ea1356675814a4445598a240f95c07.jpg" alt="Sombrero" />
                 <h3>Sombrero de Paja</h3>
                 <p class="precio-original">$25.00</p>
                 <p class="precio">$20.00</p>
@@ -1866,7 +1899,7 @@
             </div>
 
             <div class="producto">
-                <img src="https://m.media-amazon.com/images/I/71AdTkjS+8L._AC_SL1500_.jpg" alt="Gorra" />
+                <img src="https://m.media-amazon.com/images/I/71VRlsAmEML._UY300_.jpg" alt="Gorra" />
                 <h3>Gorra de Béisbol</h3>
                 <p class="precio">$19.00</p>
                 <p>Gorra ajustable con diseño minimalista. Ideal para looks casuales.</p>
@@ -1908,7 +1941,7 @@
 
             <div class="producto">
                 <div class="descuento">-25%</div>
-                <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/06/1688620901d9005b3909b90c4790e45ea8831424da_thumbnail_720x.jpg" alt="Cartera" />
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/03/168835549741d83398ec3405efa71a590474ee4d86_thumbnail_336x.jpg" alt="Cartera" />
                 <h3>Cartera Compacta</h3>
                 <p class="precio-original">$26.00</p>
                 <p class="precio">$25.25</p>
@@ -1964,7 +1997,7 @@
 
             <div class="producto">
                 <div class="descuento">-20%</div>
-                <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/03/168835549741d83398ec3405efa71a590474ee4d86_thumbnail_336x.jpg" alt="Bolso" />
+                <img src="https://img.ltwebstatic.com/images3_spmp/2023/07/09/16888855543541fce04fe93fbbc37a8ac07bff5481_thumbnail_720x.jpg" alt="Bolso" />
                 <h3>Bolso Bandolera</h3>
                 <p class="precio-original">$35.00</p>
                 <p class="precio">$24.00</p>
@@ -2003,6 +2036,117 @@
                     <button onclick="modificarCantidad(this, 1)">+</button>
                 </div>
                 <button onclick="agregarAlCarrito('Collar Largo', 15.6, this)">Añadir al carrito</button>
+            </div>
+
+            <!-- Nuevos productos agregados -->
+            <div class="producto">
+                <div class="agotado">Agotado</div>
+                <img src="https://i.ebayimg.com/thumbs/images/g/vlkAAOSw4rVmqQXV/s-l1200.jpg" alt="Bolso de playa" />
+                <h3>Bolso de Playa</h3>
+                <p class="precio">$28.00</p>
+                <p>Bolso grande de tela resistente al agua. Ideal para días de playa.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Bolso de Playa', 28, this)" disabled>Agotado</button>
+            </div>
+
+            <div class="producto">
+                <div class="ultimas-unidades">Últimas unidades</div>
+                <img src="https://img.myipadbox.com/upload/store/detail_l/TBD06050814_B1.jpg" alt="Riñonera" />
+                <h3>Riñonera Deportiva</h3>
+                <p class="precio">$22.00</p>
+                <p>Riñonera ajustable con múltiples compartimentos. Impermeable.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Riñonera Deportiva', 22, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://resources.diariolibre.com/images/binrepository/unknown-8_11835700_20190625113438.jpg" alt="Cintillo" />
+                <h3>Cintillo Elegante</h3>
+                <p class="precio">$12.00</p>
+                <p>Cintillo de tela con diseño minimalista. Varios colores disponibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Cintillo Elegante', 12, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="descuento">-15%</div>
+                <img src="https://montsaint.es/wp-content/uploads/2023/08/Sin-titulo-1_0001_2023.07.11.MONTSAINT.SS236085.jpg" alt="Gafas de sol" />
+                <h3>Gafas de Sol Cat Eye</h3>
+                <p class="precio-original">$25.00</p>
+                <p class="precio">$17.25</p>
+                <p>Gafas de sol con forma de ojo de gato. Protección UV400.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Gafas de Sol Cat Eye', 17.25, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="agotado">Agotado</div>
+                <img src="https://i.pinimg.com/736x/42/97/09/429709dcbbaec89205795ccd79bdecf9.jpg" alt="Tirantes" />
+                <h3>Tirantes Elegantes</h3>
+                <p class="precio">$15.00</p>
+                <p>Tirantes ajustables en cuero genuino. Varios colores disponibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Tirantes Elegantes', 15, this)" disabled>Agotado</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://www.calledelregalo.es/photo/2039/llavero-con-foto-grabada-16.jpg" alt="Llavero" />
+                <h3>Llavero Personalizado</h3>
+                <p class="precio">$8.00</p>
+                <p>Llavero metálico con inicial grabada. Varias letras disponibles.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Llavero Personalizado', 8, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <div class="ultimas-unidades">Últimas unidades</div>
+                <img src="https://joyasmytoke.cl/wp-content/uploads/2022/02/pulPiedrasCircones-1.jpg" alt="Pulsera" />
+                <h3>Pulsera de Plata</h3>
+                <p class="precio">$32.00</p>
+                <p>Pulsera fina de plata esterlina 925. Ajuste perfecto.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Pulsera de Plata', 32, this)">Añadir al carrito</button>
+            </div>
+
+            <div class="producto">
+                <img src="https://http2.mlstatic.com/D_NQ_NP_623227-MLC80146774267_102024-O-pin-decorativo-vincent-van-gogh-girasoles-1888.webp" alt="Pin" />
+                <h3>Pin Decorativo</h3>
+                <p class="precio">$7.00</p>
+                <p>Pin metálico con diseño vintage van Gogh. Ideal para personalizar bolsos y chaquetas.</p>
+                <div class="cantidad-selector">
+                    <button onclick="modificarCantidad(this, -1)">-</button>
+                    <input type="number" value="1" min="1" class="cantidad">
+                    <button onclick="modificarCantidad(this, 1)">+</button>
+                </div>
+                <button onclick="agregarAlCarrito('Pin Decorativo', 7, this)">Añadir al carrito</button>
             </div>
         </div>
     </section>
