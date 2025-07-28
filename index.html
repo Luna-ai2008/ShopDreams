@@ -34,31 +34,7 @@
             50% { transform: translateY(-10px); }
         }
         
-        /* Nueva animación para maquillajes cayendo (una sola vez) */
-        @keyframes falling {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 0;
-            }
-            20% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(calc(100vh + 100px)) rotate(360deg);
-                opacity: 0;
-            }
-        }
-        
-        /* Estilos para los elementos de maquillaje que caen */
-        .falling-makeup {
-            position: fixed;
-            top: -100px;
-            z-index: 10;
-            pointer-events: none;
-            animation: falling 3s ease-in forwards;
-            font-size: 24px;
-        }
-        
+        /* Estilos generales */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -114,6 +90,99 @@
             display: block;
         }
         
+        /* Estilos para la vista del carrito */
+        #vista-carrito {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .cabecera-carrito {
+            background-color: #e91e63;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .contenido-carrito {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .botones-carrito {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 15px;
+        }
+        
+        .botones-carrito button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-seguir-comprando {
+            background-color: #f8bbd0;
+            color: #333;
+        }
+        
+        .btn-cancelar {
+            background-color: #666;
+            color: white;
+        }
+        
+        .btn-finalizar {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .botones-carrito button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+        
+        .botones-carrito button:active {
+            transform: translateY(1px);
+        }
+        
+        /* Mini carrito flotante */
+        #mini-carrito {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #e91e63;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 99;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        #mini-carrito:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        /* Estilos para productos */
         .tienda {
             display: flex;
             flex-wrap: wrap;
@@ -269,65 +338,7 @@
             cursor: not-allowed;
         }
         
-        #carrito {
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 30px;
-            border: 1px solid #f8bbd0;
-            transition: all 0.3s ease;
-            position: fixed;
-            right: 20px;
-            top: 100px;
-            width: 300px;
-            z-index: 99;
-        }
-        
-        #carrito:hover {
-            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.1);
-        }
-        
-        #lista-carrito {
-            list-style: none;
-            padding: 0;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        #lista-carrito li {
-            padding: 8px 0;
-            border-bottom: 1px dashed #f8bbd0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        
-        #lista-carrito li:hover {
-            background-color: #fff0f5;
-        }
-        
-        #lista-carrito button {
-            background: none;
-            border: none;
-            color: #e91e63;
-            cursor: pointer;
-            font-size: 1.2em;
-            transition: transform 0.3s;
-        }
-        
-        #lista-carrito button:hover {
-            transform: scale(1.2);
-        }
-        
-        #total {
-            font-size: 1.3em;
-            margin-top: 20px;
-            text-align: right;
-            font-weight: bold;
-            color: #e91e63;
-        }
-        
+        /* Estilos para artículos */
         .articulo {
             background-color: #ffe4ec;
             margin-bottom: 20px;
@@ -379,295 +390,270 @@
             transform: translateY(-5px) scale(1.2);
         }
         
-        .consejos-texto {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .consejo {
-            flex: 1;
-            min-width: 300px;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(233, 30, 99, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .consejo:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(233, 30, 99, 0.2);
-        }
-        
-        .consejo h3 {
-            color: #e91e63;
-            margin-top: 0;
-            border-bottom: 1px dashed #f8bbd0;
-            padding-bottom: 10px;
-        }
-        
-        .consejos-imagenes {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        
-        .consejos-imagenes img {
-            width: 30%;
-            min-width: 250px;
-            border-radius: 10px;
-            object-fit: cover;
-            height: 200px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.5s ease;
-        }
-        
-        .consejos-imagenes img:hover {
-            transform: scale(1.05) rotate(1deg);
-        }
-        
-        /* Estilos para el cajero */
-        #cajero {
-            display: none;
-            background-color: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid #f8bbd0;
-            animation: fadeIn 0.5s ease-out;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
-        }
-        
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 999;
-        }
-        
-        .metodos-pago {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        
-        .metodo-pago {
-            border: 2px solid #f8bbd0;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 120px;
-        }
-        
-        .metodo-pago:hover {
-            border-color: #e91e63;
-            transform: translateY(-5px);
-        }
-        
-        .metodo-pago.seleccionado {
-            border-color: #e91e63;
-            background-color: #fff0f5;
-            animation: pulse 0.5s;
-        }
-        
-        .metodo-pago img {
-            width: 50px;
-            height: 30px;
-            object-fit: contain;
-            margin-bottom: 10px;
-            transition: transform 0.3s;
-        }
-        
-        .metodo-pago:hover img {
-            transform: scale(1.1);
-        }
-        
-        .formulario-pago {
-            display: none;
-            animation: fadeIn 0.5s ease-out;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            transition: all 0.3s;
-        }
-        
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            border-color: #e91e63;
-            box-shadow: 0 0 5px rgba(233, 30, 99, 0.3);
-            transform: scale(1.01);
-        }
-        
-        .btn-pagar {
-            background-color: #e91e63;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-pagar:hover {
-            background-color: #c2185b;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(194, 24, 91, 0.3);
-        }
-        
-        .btn-pagar:active {
-            transform: translateY(1px);
-        }
-        
-        #btn-finalizar-compra {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            display: block;
-            width: 100%;
-            transition: all 0.3s ease;
-        }
-        
-        #btn-finalizar-compra:hover {
-            background-color: #45a049;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(69, 160, 73, 0.3);
-        }
-        
-        #btn-finalizar-compra:active {
-            transform: translateY(1px);
-        }
-        
-        #btn-finalizar-compra:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        .categoria-titulo {
-            text-align: center;
-            color: #e91e63;
-            margin: 30px 0;
-            font-size: 2em;
-            position: relative;
-        }
-        
-        .categoria-titulo:after {
-            content: "";
-            display: block;
-            width: 100px;
-            height: 3px;
-            background-color: #e91e63;
-            margin: 10px auto;
-        }
-        
-        .categoria-descripcion {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            color: #666;
-        }
-        
-        .btn-cerrar-cajero {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 1.5em;
-            cursor: pointer;
-            color: #666;
-        }
-        
-        .btn-cerrar-cajero:hover {
-            color: #e91e63;
-        }
+/* Estilos para el cajero mejorado */
+#cajero {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #f8bbd0;
+    animation: fadeIn 0.5s ease-out;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+}
 
-        .pasos-compra {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        
-        .paso {
-            text-align: center;
-            flex: 1;
-            position: relative;
-        }
-        
-        .paso:not(:last-child):after {
-            content: "";
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            width: 100%;
-            height: 2px;
-            background-color: #f8bbd0;
-            z-index: -1;
-        }
-        
-        .numero-paso {
-            width: 30px;
-            height: 30px;
-            background-color: #f8bbd0;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 5px;
-            color: #333;
-            font-weight: bold;
-        }
-        
-        .paso.activo .numero-paso {
-            background-color: #e91e63;
-            color: white;
-        }
-        
-        .paso.completado .numero-paso {
-            background-color: #4CAF50;
-            color: white;
-        }
+.btn-cerrar-cajero {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #e91e63;
+}
 
+.pasos-compra {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.paso {
+    text-align: center;
+    flex: 1;
+    position: relative;
+    padding: 0 10px;
+}
+
+.paso:not(:last-child):after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: -15px;
+    width: 30px;
+    height: 1px;
+    background-color: #ccc;
+}
+
+.numero-paso {
+    width: 30px;
+    height: 30px;
+    background-color: #f8bbd0;
+    color: #333;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 5px;
+    font-weight: bold;
+}
+
+.paso.activo .numero-paso {
+    background-color: #e91e63;
+    color: white;
+}
+
+.paso.completado .numero-paso {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.metodos-pago {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.metodo-pago {
+    border: 1px solid #f8bbd0;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.metodo-pago:hover {
+    border-color: #e91e63;
+}
+
+.metodo-pago.seleccionado {
+    border-color: #e91e63;
+    background-color: #fff0f5;
+}
+
+.metodo-pago img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.formulario-pago {
+    margin: 20px 0;
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #f8bbd0;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.btn-pagar {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    transition: all 0.3s;
+}
+
+.btn-pagar:hover {
+    background-color: #c2185b;
+    transform: translateY(-2px);
+}
+
+.btn-pagar:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Estilos para la factura */
+#factura {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    z-index: 1002;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: fadeIn 0.5s ease-out;
+}
+
+#factura .header-factura {
+    text-align: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e91e63;
+    padding-bottom: 15px;
+}
+
+#factura .logo-factura {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e91e63;
+    margin-bottom: 10px;
+}
+
+#factura .info-factura {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+#factura .info-cliente {
+    flex: 1;
+}
+
+#factura .info-tienda {
+    flex: 1;
+    text-align: right;
+}
+
+#factura .detalle-factura {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+}
+
+#factura .detalle-factura th {
+    background-color: #f8bbd0;
+    padding: 10px;
+    text-align: left;
+}
+
+#factura .detalle-factura td {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+#factura .detalle-factura tr:last-child td {
+    border-bottom: none;
+}
+
+#factura .totales-factura {
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #e91e63;
+}
+
+#factura .btn-imprimir {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+#factura .btn-imprimir:hover {
+    background-color: #c2185b;
+}
+
+/* Overlay para el fondo oscuro */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1000;
+    display: none;
+}
+        
+        /* Responsive */
         @media (max-width: 768px) {
             .producto {
                 width: 100%;
@@ -679,28 +665,17 @@
                 gap: 5px;
             }
             
-            .consejos-imagenes img {
-                width: 100%;
-            }
-            
-            .metodos-pago {
+            .botones-carrito {
                 flex-direction: column;
-                align-items: center;
             }
             
-            #carrito {
-                position: static;
-                width: auto;
-                margin: 20px auto;
-            }
-            
-            .pasos-compra {
+            #factura .info-factura {
                 flex-direction: column;
-                gap: 10px;
             }
             
-            .paso:not(:last-child):after {
-                display: none;
+            #factura .info-tienda {
+                text-align: left;
+                margin-top: 20px;
             }
         }
     </style>
@@ -719,157 +694,37 @@
         <a href="#" onclick="mostrarSeccion('accesorios')">Accesorios</a>
         <a href="#" onclick="mostrarSeccion('consejos')">Consejos</a>
         <a href="#" onclick="mostrarSeccion('contacto')">Contacto</a>
+        <a href="#" onclick="mostrarCarrito()">🛒 Carrito</a>
     </nav>
 
-    <!-- Carrito de compras -->
-    <div id="carrito">
-        <h3>🛒 Tu Carrito</h3>
-        <ul id="lista-carrito"></ul>
-        <div id="total">Total: $0.00</div>
-        <button id="btn-finalizar-compra" onclick="mostrarCajero()" disabled>Finalizar Compra</button>
+    <!-- Mini carrito flotante -->
+    <div id="mini-carrito" onclick="mostrarCarrito()">
+        <span id="contador-carrito">0</span> items
     </div>
 
-    <!-- Cajero de pago -->
-    <div class="overlay" id="overlay"></div>
-    <div id="cajero">
-        <button class="btn-cerrar-cajero" onclick="cerrarCajero()">×</button>
-        
-        <div class="pasos-compra">
-            <div class="paso" id="paso1">
-                <div class="numero-paso">1</div>
-                <div>Método de pago</div>
-            </div>
-            <div class="paso" id="paso2">
-                <div class="numero-paso">2</div>
-                <div>Envío</div>
-            </div>
-            <div class="paso" id="paso3">
-                <div class="numero-paso">3</div>
-                <div>Confirmación</div>
-            </div>
+    <!-- Vista completa del carrito -->
+    <div id="vista-carrito">
+        <div class="cabecera-carrito">
+            <h2>🛒 Tu Carrito de Compras</h2>
+            <button onclick="ocultarCarrito()" style="background: none; border: none; color: white; font-size: 1.5em; cursor: pointer;">×</button>
         </div>
         
-        <!-- Paso 1: Método de pago -->
-        <div id="contenido-paso1">
-            <h3 style="color: #e91e63; text-align: center;">💳 Método de Pago</h3>
-            <div class="metodos-pago">
-                <div class="metodo-pago" onclick="seleccionarMetodoPago('tarjeta')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Tarjeta">
-                    <p>Tarjeta</p>
-                </div>
-                <div class="metodo-pago" onclick="seleccionarMetodoPago('paypal')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png" alt="PayPal">
-                    <p>PayPal</p>
-                </div>
-                <div class="metodo-pago" onclick="seleccionarMetodoPago('efectivo')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331946.png" alt="Efectivo">
-                    <p>Efectivo</p>
-                </div>
-                <div class="metodo-pago" onclick="seleccionarMetodoPago('transferencia')">
-                    <img src="https://cdn-icons-png.flaticon.com/512/477/477662.png" alt="Transferencia">
-                    <p>Transferencia</p>
-                </div>
-            </div>
-
-            <div id="form-tarjeta" class="formulario-pago">
-                <div class="form-group">
-                    <label>Nombre en tarjeta</label>
-                    <input type="text" id="nombre-tarjeta" required>
-                </div>
-                <div class="form-group">
-                    <label>Número de tarjeta</label>
-                    <input type="text" id="numero-tarjeta" required>
-                </div>
-                <div class="form-group">
-                    <label>Fecha expiración</label>
-                    <input type="text" id="fecha-expiracion" placeholder="MM/AA" required>
-                </div>
-                <div class="form-group">
-                    <label>CVV</label>
-                    <input type="text" id="cvv" required>
-                </div>
+        <div class="contenido-carrito">
+            <ul id="lista-carrito" style="list-style: none; padding: 0;"></ul>
+            
+            <div style="text-align: right; margin-top: 20px;">
+                <h3>Total: $<span id="total-carrito">0.00</span></h3>
             </div>
             
-            <button class="btn-pagar" onclick="siguientePaso(2)">Continuar</button>
-        </div>
-        
-        <!-- Paso 2: Envío -->
-        <div id="contenido-paso2" style="display: none;">
-            <h3 style="color: #e91e63; text-align: center;">🚚 Información de Envío</h3>
-            
-            <div class="form-group">
-                <label>Dirección de envío</label>
-                <textarea id="direccion-envio" rows="3" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label>Ciudad</label>
-                <input type="text" id="ciudad" required>
-            </div>
-            
-            <div class="form-group">
-                <label>Código Postal</label>
-                <input type="text" id="codigo-postal" required>
-            </div>
-            
-            <div class="form-group">
-                <label>País</label>
-                <select id="pais" required>
-                    <option value="">Selecciona un país</option>
-                    <option value="es">España</option>
-                    <option value="mx">México</option>
-                    <option value="ar">Argentina</option>
-                    <option value="co">Colombia</option>
-                    <option value="cl">Chile</option>
-                    <option value="pe">Perú</option>
-                    <option value="es">El Salvador</option>
-                </select>
-            </div>
-            
-            <div class="form-group">
-                <label>Método de envío</label>
-                <select id="metodo-envio" required>
-                    <option value="">Selecciona método</option>
-                    <option value="estandar">Envío estándar (3-5 días) - $5.00</option>
-                    <option value="express">Envío express (1-2 días) - $10.00</option>
-                    <option value="recogida">Recoger en tienda - Gratis</option>
-                </select>
-            </div>
-            
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-pagar" onclick="siguientePaso(1)" style="background-color: #666;">Anterior</button>
-                <button class="btn-pagar" onclick="siguientePaso(3)">Continuar</button>
-            </div>
-        </div>
-        
-        <!-- Paso 3: Confirmación -->
-        <div id="contenido-paso3" style="display: none;">
-            <h3 style="color: #e91e63; text-align: center;">✅ Resumen de Compra</h3>
-            
-            <div style="background-color: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                <h4>Método de Pago</h4>
-                <p id="resumen-metodo-pago"></p>
-                
-                <h4 style="margin-top: 15px;">Dirección de Envío</h4>
-                <p id="resumen-direccion"></p>
-                <p id="resumen-ciudad"></p>
-                <p id="resumen-envio"></p>
-            </div>
-            
-            <div style="background-color: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-                <h4>Productos</h4>
-                <ul id="resumen-productos" style="list-style: none; padding: 0;"></ul>
-                <p style="text-align: right; font-weight: bold;">Total: $<span id="resumen-total">0.00</span></p>
-            </div>
-            
-            <div style="display: flex; gap: 10px;">
-                <button class="btn-pagar" onclick="siguientePaso(2)" style="background-color: #666;">Anterior</button>
-                <button class="btn-pagar" onclick="procesarPago()">Confirmar y Pagar</button>
+            <div class="botones-carrito">
+                <button class="btn-seguir-comprando" onclick="ocultarCarrito()">← Seguir comprando</button>
+                <button class="btn-cancelar" onclick="vaciarCarrito()">Vaciar carrito</button>
+                <button class="btn-finalizar" onclick="mostrarCajero()">Finalizar compra</button>
             </div>
         </div>
     </div>
 
-    <!-- Secciones -->
+    <!-- Sección de Inicio -->
     <section id="inicio" class="active">
         <div class="articulo">
             <h2>Bienvenida a ShopDreams</h2>
@@ -928,7 +783,7 @@
         </div>
     </section>
 
-    <section id="moda">
+   <section id="moda">
         <h2 class="categoria-titulo">👗 Moda</h2>
         <p class="categoria-descripcion">Descubre las últimas tendencias en moda para esta temporada. Vestidos, blusas, pantalones y más para completar tu guardarropa.</p>
         
@@ -2204,8 +2059,8 @@
             </div>
         </div>
     </section>
-
-    <section id="contacto">
+    
+     <section id="contacto">
         <div class="articulo">
             <h2>📬 Contacta con Nosotros</h2>
             <p>¿Tienes preguntas sobre nuestros productos o necesitas asesoramiento personalizado? Estamos aquí para ayudarte.</p>
@@ -2219,6 +2074,198 @@
             <img src="https://marketplace.canva.com/EAGTwJEXRhU/1/0/900w/canva-fondo-pantalla-para-tel%C3%A9fono-estrella-rosa-brillos-4u91KP5cKvs.jpg" alt="Contacto moda y belleza" />
         </div>
     </section>
+
+<!-- Cajero de pago -->
+    <div class="overlay" id="overlay"></div>
+    <div id="cajero">
+        <button class="btn-cerrar-cajero" onclick="cerrarCajero()">×</button>
+        
+        <div class="pasos-compra">
+            <div class="paso" id="paso1">
+                <div class="numero-paso">1</div>
+                <div>Método de pago</div>
+            </div>
+            <div class="paso" id="paso2">
+                <div class="numero-paso">2</div>
+                <div>Envío</div>
+            </div>
+            <div class="paso" id="paso3">
+                <div class="numero-paso">3</div>
+                <div>Confirmación</div>
+            </div>
+        </div>
+        
+        <!-- Paso 1: Método de pago -->
+        <div id="contenido-paso1">
+            <h3 style="color: #e91e63; text-align: center;">💳 Método de Pago</h3>
+            <div class="metodos-pago">
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('tarjeta')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/196/196578.png" alt="Tarjeta">
+                    <p>Tarjeta</p>
+                </div>
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('paypal')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/174/174861.png" alt="PayPal">
+                    <p>PayPal</p>
+                </div>
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('efectivo')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2331/2331946.png" alt="Efectivo">
+                    <p>Efectivo</p>
+                </div>
+                <div class="metodo-pago" onclick="seleccionarMetodoPago('transferencia')">
+                    <img src="https://cdn-icons-png.flaticon.com/512/477/477662.png" alt="Transferencia">
+                    <p>Transferencia</p>
+                </div>
+            </div>
+
+            <div id="form-tarjeta" class="formulario-pago">
+                <div class="form-group">
+                    <label>Nombre en tarjeta</label>
+                    <input type="text" id="nombre-tarjeta" required>
+                </div>
+                <div class="form-group">
+                    <label>Número de tarjeta</label>
+                    <input type="text" id="numero-tarjeta" required>
+                </div>
+                <div class="form-group">
+                    <label>Fecha expiración</label>
+                    <input type="text" id="fecha-expiracion" placeholder="MM/AA" required>
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" id="cvv" required>
+                </div>
+            </div>
+            
+            <button class="btn-pagar" onclick="siguientePaso(2)">Continuar</button>
+        </div>
+        
+        <!-- Paso 2: Envío -->
+        <div id="contenido-paso2" style="display: none;">
+            <h3 style="color: #e91e63; text-align: center;">🚚 Información de Envío</h3>
+            
+            <div class="form-group">
+                <label>Dirección de envío</label>
+                <textarea id="direccion-envio" rows="3" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Ciudad</label>
+                <input type="text" id="ciudad" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Código Postal</label>
+                <input type="text" id="codigo-postal" required>
+            </div>
+            
+            <div class="form-group">
+                <label>País</label>
+                <select id="pais" required>
+                    <option value="">Selecciona un país</option>
+                    <option value="es">España</option>
+                    <option value="mx">México</option>
+                    <option value="ar">Argentina</option>
+                    <option value="co">Colombia</option>
+                    <option value="cl">Chile</option>
+                    <option value="pe">Perú</option>
+                    <option value="sv">El Salvador</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Método de envío</label>
+                <select id="metodo-envio" required>
+                    <option value="">Selecciona método</option>
+                    <option value="estandar">Envío estándar (3-5 días) - $5.00</option>
+                    <option value="express">Envío express (1-2 días) - $10.00</option>
+                    <option value="recogida">Recoger en tienda - Gratis</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-pagar" onclick="siguientePaso(1)" style="background-color: #666;">Anterior</button>
+                <button class="btn-pagar" onclick="siguientePaso(3)">Continuar</button>
+            </div>
+        </div>
+        
+        <!-- Paso 3: Confirmación -->
+        <div id="contenido-paso3" style="display: none;">
+            <h3 style="color: #e91e63; text-align: center;">✅ Resumen de Compra</h3>
+            
+            <div style="background-color: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <h4>Método de Pago</h4>
+                <p id="resumen-metodo-pago"></p>
+                
+                <h4 style="margin-top: 15px;">Dirección de Envío</h4>
+                <p id="resumen-direccion"></p>
+                <p id="resumen-ciudad"></p>
+                <p id="resumen-envio"></p>
+            </div>
+            
+            <div style="background-color: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <h4>Productos</h4>
+                <ul id="resumen-productos" style="list-style: none; padding: 0;"></ul>
+                <p style="text-align: right; font-weight: bold;">Total: $<span id="resumen-total">0.00</span></p>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-pagar" onclick="siguientePaso(2)" style="background-color: #666;">Anterior</button>
+                <button class="btn-pagar" onclick="procesarPago()">Confirmar y Pagar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Factura de compra -->
+    <div id="factura">
+        <div class="header-factura">
+            <div class="logo-factura">ShopDreams</div>
+            <h2>FACTURA DE COMPRA</h2>
+            <p id="fecha-factura"></p>
+            <p id="numero-factura"></p>
+        </div>
+        
+        <div class="info-factura">
+            <div class="info-cliente">
+                <h3>Datos del Cliente</h3>
+                <p id="factura-nombre"></p>
+                <p id="factura-direccion"></p>
+                <p id="factura-ciudad"></p>
+                <p id="factura-pais"></p>
+            </div>
+            
+            <div class="info-tienda">
+                <h3>Datos de la Tienda</h3>
+                <p>ShopDreams</p>
+                <p>Colonia escalón,7 avenida norte</p>
+                <p>San Salvador, El Salvador</p>
+                <p>Tel: +503 1456 6789</p>
+                <p>Email: info@shopdreams.com</p>
+            </div>
+        </div>
+        
+        <table class="detalle-factura">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="detalle-productos-factura">
+                <!-- Aquí se agregarán los productos dinámicamente -->
+            </tbody>
+        </table>
+        
+        <div class="totales-factura">
+            <p>Subtotal: $<span id="factura-subtotal">0.00</span></p>
+            <p>Envío: $<span id="factura-envio">0.00</span></p>
+            <p>Total: $<span id="factura-total">0.00</span></p>
+            <p>Método de pago: <span id="factura-metodo-pago"></span></p>
+        </div>
+        
+        <button class="btn-imprimir" onclick="imprimirFactura()">🖨️ Imprimir Factura</button>
+    </div>
 
     <footer>
         <div class="social-icons">
@@ -2251,6 +2298,42 @@
         document.addEventListener('DOMContentLoaded', function() {
             mostrarSeccion('inicio');
         });
+
+        // Funciones para el carrito
+        function mostrarCarrito() {
+            document.getElementById('vista-carrito').style.display = 'block';
+            actualizarCarrito();
+        }
+        
+        function ocultarCarrito() {
+            document.getElementById('vista-carrito').style.display = 'none';
+        }
+
+        function vaciarCarrito() {
+            if (confirm('¿Estás seguro de que quieres vaciar tu carrito?')) {
+                carrito = [];
+                actualizarCarrito();
+                // Animación de confirmación
+                const notificacion = document.createElement('div');
+                notificacion.textContent = 'Carrito vaciado';
+                notificacion.style.position = 'fixed';
+                notificacion.style.bottom = '20px';
+                notificacion.style.left = '50%';
+                notificacion.style.transform = 'translateX(-50%)';
+                notificacion.style.backgroundColor = '#e91e63';
+                notificacion.style.color = 'white';
+                notificacion.style.padding = '10px 20px';
+                notificacion.style.borderRadius = '5px';
+                notificacion.style.zIndex = '1000';
+                notificacion.style.animation = 'fadeIn 0.5s';
+                document.body.appendChild(notificacion);
+                
+                setTimeout(() => {
+                    notificacion.style.opacity = '0';
+                    setTimeout(() => document.body.removeChild(notificacion), 500);
+                }, 2000);
+            }
+        }
 
         // Función para modificar la cantidad de productos
         function modificarCantidad(boton, cambio) {
@@ -2307,43 +2390,71 @@
 
         function actualizarCarrito() {
             const listaCarrito = document.getElementById("lista-carrito");
-            const totalElement = document.getElementById("total");
-            const btnFinalizar = document.getElementById("btn-finalizar-compra");
+            const totalElement = document.getElementById("total-carrito");
+            const contadorCarrito = document.getElementById("contador-carrito");
             let total = 0;
+            let totalItems = 0;
             
             listaCarrito.innerHTML = "";
             
             if (carrito.length === 0) {
-                listaCarrito.innerHTML = "<li>Tu carrito está vacío</li>";
-                btnFinalizar.disabled = true;
+                listaCarrito.innerHTML = "<li style='text-align: center; padding: 20px; color: #666;'>Tu carrito está vacío</li>";
             } else {
                 carrito.forEach(item => {
                     const li = document.createElement("li");
-                    li.textContent = `${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}`;
+                    li.style.display = 'flex';
+                    li.style.justifyContent = 'space-between';
+                    li.style.alignItems = 'center';
+                    li.style.padding = '15px 0';
+                    li.style.borderBottom = '1px solid #f0f0f0';
+                    
+                    const infoProducto = document.createElement("div");
+                    infoProducto.innerHTML = `
+                        <strong>${item.nombre}</strong><br>
+                        ${item.cantidad} x $${item.precio.toFixed(2)}
+                    `;
+                    li.appendChild(infoProducto);
+                    
+                    const controles = document.createElement("div");
+                    controles.style.display = 'flex';
+                    controles.style.alignItems = 'center';
+                    controles.style.gap = '10px';
+                    
+                    const precioTotal = document.createElement("span");
+                    precioTotal.textContent = `$${(item.precio * item.cantidad).toFixed(2)}`;
+                    precioTotal.style.fontWeight = 'bold';
+                    controles.appendChild(precioTotal);
                     
                     const botonEliminar = document.createElement("button");
                     botonEliminar.textContent = "❌";
+                    botonEliminar.style.background = 'none';
+                    botonEliminar.style.border = 'none';
+                    botonEliminar.style.cursor = 'pointer';
+                    botonEliminar.style.fontSize = '1.2em';
                     botonEliminar.onclick = () => eliminarDelCarrito(item.nombre);
-                    li.appendChild(botonEliminar);
+                    controles.appendChild(botonEliminar);
+                    
+                    li.appendChild(controles);
                     listaCarrito.appendChild(li);
                     
                     total += item.precio * item.cantidad;
+                    totalItems += item.cantidad;
                 });
+            }
+            
+            totalElement.textContent = total.toFixed(2);
+            contadorCarrito.textContent = totalItems;
+            
+            // Actualizar botones según si hay items
+            const btnFinalizar = document.querySelector('.btn-finalizar');
+            const btnCancelar = document.querySelector('.btn-cancelar');
+            
+            if (carrito.length === 0) {
+                btnFinalizar.disabled = true;
+                btnCancelar.disabled = true;
+            } else {
                 btnFinalizar.disabled = false;
-            }
-            
-            totalElement.textContent = `Total: $${total.toFixed(2)}`;
-            
-            // Actualizar total en el cajero
-            if (document.getElementById('total-pagar')) {
-                document.getElementById('total-pagar').textContent = total.toFixed(2);
-            }
-            
-            // Animación al actualizar carrito
-            if (carrito.length > 0) {
-                listaCarrito.style.animation = 'fadeIn 0.5s';
-                totalElement.style.animation = 'pulse 0.5s';
-                setTimeout(() => totalElement.style.animation = '', 500);
+                btnCancelar.disabled = false;
             }
         }
 
@@ -2365,8 +2476,8 @@
         function mostrarCajero() {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('cajero').style.display = 'block';
-            document.getElementById('total-pagar').textContent = 
-                document.getElementById('total').textContent.split('$')[1];
+            document.getElementById('resumen-total').textContent = 
+                document.getElementById('total-carrito').textContent;
             
             // Resetear pasos
             pasoActual = 1;
@@ -2393,7 +2504,7 @@
                 el.classList.remove('seleccionado');
             });
             
-            // Marcar seleccionado con animación
+            // Marcar seleccionado
             event.currentTarget.classList.add('seleccionado');
             
             // Mostrar formulario correspondiente
@@ -2488,9 +2599,6 @@
                     li.textContent = `${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}`;
                     resumenProductos.appendChild(li);
                 });
-                
-                document.getElementById('resumen-total').textContent = 
-                    document.getElementById('total').textContent.split('$')[1];
             }
             
             pasoActual = nuevoPaso;
@@ -2499,9 +2607,9 @@
 
         function procesarPago() {
             // Animación de procesamiento
-            const btnPagar = document.querySelector('.btn-pagar');
+            const btnPagar = document.querySelector('#contenido-paso3 .btn-pagar');
             btnPagar.disabled = true;
-            btnPagar.innerHTML = 'Procesando... <i class="fa fa-spinner fa-spin"></i>';
+            btnPagar.innerHTML = 'Procesando...';
             btnPagar.style.animation = 'pulse 1s infinite';
             
             // Simular procesamiento de pago
@@ -2511,29 +2619,11 @@
                 btnPagar.style.backgroundColor = '#4CAF50';
                 
                 setTimeout(() => {
-                    // Animación de confirmación
+                    // Mostrar factura
+                    mostrarFactura();
+                    
+                    // Cerrar cajero
                     cerrarCajero();
-                    
-                    // Notificación de éxito
-                    const notificacion = document.createElement('div');
-                    notificacion.textContent = '✅ Compra realizada con éxito!';
-                    notificacion.style.position = 'fixed';
-                    notificacion.style.bottom = '20px';
-                    notificacion.style.left = '50%';
-                    notificacion.style.transform = 'translateX(-50%)';
-                    notificacion.style.backgroundColor = '#4CAF50';
-                    notificacion.style.color = 'white';
-                    notificacion.style.padding = '15px 30px';
-                    notificacion.style.borderRadius = '5px';
-                    notificacion.style.zIndex = '1000';
-                    notificacion.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-                    notificacion.style.animation = 'fadeIn 0.5s, float 3s 0.5s infinite';
-                    document.body.appendChild(notificacion);
-                    
-                    setTimeout(() => {
-                        notificacion.style.opacity = '0';
-                        setTimeout(() => document.body.removeChild(notificacion), 500);
-                    }, 3000);
                     
                     // Resetear todo
                     carrito = [];
@@ -2544,7 +2634,7 @@
                     });
                     document.getElementById('form-tarjeta').style.display = 'none';
                     document.getElementById('form-tarjeta').reset();
-                    btnPagar.innerHTML = 'Pagar $<span id="total-pagar">0.00</span>';
+                    btnPagar.innerHTML = 'Confirmar y Pagar';
                     btnPagar.style.backgroundColor = '#e91e63';
                     btnPagar.disabled = false;
                     
@@ -2555,29 +2645,84 @@
             }, 2000);
         }
 
+        // Funciones para la factura
+        function mostrarFactura() {
+            // Configurar fecha y número de factura
+            const ahora = new Date();
+            document.getElementById('fecha-factura').textContent = `Fecha: ${ahora.toLocaleDateString()} ${ahora.toLocaleTimeString()}`;
+            document.getElementById('numero-factura').textContent = `Factura #${Math.floor(Math.random() * 10000)}`;
+            
+            // Configurar información del cliente
+            document.getElementById('factura-nombre').textContent = `Nombre: Cliente ShopDreams`;
+            document.getElementById('factura-direccion').textContent = `Dirección: ${infoEnvio.direccion}`;
+            document.getElementById('factura-ciudad').textContent = `Ciudad: ${infoEnvio.ciudad}, ${infoEnvio.codigoPostal}`;
+            document.getElementById('factura-pais').textContent = `País: ${document.getElementById('pais').options[document.getElementById('pais').selectedIndex].text}`;
+            
+            // Calcular totales
+            let subtotal = 0;
+            const detalleProductos = document.getElementById('detalle-productos-factura');
+            detalleProductos.innerHTML = '';
+            
+            carrito.forEach(item => {
+                const subtotalProducto = item.precio * item.cantidad;
+                subtotal += subtotalProducto;
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.nombre}</td>
+                    <td>${item.cantidad}</td>
+                    <td>$${item.precio.toFixed(2)}</td>
+                    <td>$${subtotalProducto.toFixed(2)}</td>
+                `;
+                detalleProductos.appendChild(tr);
+            });
+            
+            // Calcular costo de envío
+            let costoEnvio = 0;
+            if (infoEnvio.metodoEnvio.includes('estandar')) {
+                costoEnvio = 5.00;
+            } else if (infoEnvio.metodoEnvio.includes('express')) {
+                costoEnvio = 10.00;
+            }
+            
+            const total = subtotal + costoEnvio;
+            
+            // Mostrar totales
+            document.getElementById('factura-subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('factura-envio').textContent = costoEnvio.toFixed(2);
+            document.getElementById('factura-total').textContent = total.toFixed(2);
+            document.getElementById('factura-metodo-pago').textContent = metodoPagoSeleccionado === 'tarjeta' ? 'Tarjeta de crédito/débito' : 
+                metodoPagoSeleccionado === 'paypal' ? 'PayPal' : 
+                metodoPagoSeleccionado === 'efectivo' ? 'Efectivo' : 'Transferencia bancaria';
+            
+            // Mostrar factura
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('factura').style.display = 'block';
+            document.getElementById('factura').style.animation = 'fadeIn 0.5s';
+        }
+
+        function cerrarFactura() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('factura').style.animation = 'fadeOut 0.5s';
+            setTimeout(() => {
+                document.getElementById('factura').style.display = 'none';
+                document.getElementById('factura').style.animation = '';
+            }, 500);
+        }
+
+        function imprimirFactura() {
+            const contenidoOriginal = document.body.innerHTML;
+            const contenidoFactura = document.getElementById('factura').innerHTML;
+            
+            document.body.innerHTML = contenidoFactura;
+            window.print();
+            
+            document.body.innerHTML = contenidoOriginal;
+            mostrarFactura();
+        }
+
         // Inicializar carrito
         actualizarCarrito();
     </script>
 </body>
-</html> 
-
-
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
+</html>
